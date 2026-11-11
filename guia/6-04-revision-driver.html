@@ -86,7 +86,7 @@ Conclusión: diseño acotado en el fragmento revisado; falta validar build/confi
 <p>Al analizar estáticamente un driver KMDF sin archivo <code>.pdb</code>, las llamadas a la API del framework (<code>WdfDriverCreate</code>, <code>WdfDeviceCreate</code>, <code>WdfIoQueueCreate</code>, <code>WdfRequestRetrieveInputBuffer</code>, etc.) <strong>no aparecen en la tabla de importaciones (IAT)</strong> (<em>Microsoft Learn: KMDF Driver Entry and Binding / <code>wdffuncenum.h</code> del WDK</em>) (<strong>Hecho confirmado</strong>):</p>
 <ol><li><strong>Mecanismo de enlace dinámico de KMDF:</strong></li></ol>
 <p>El binario solo importa <code>WdfVersionBind</code> desde <code>WdfLdr.sys</code>. Durante el arranque, el stub del compilador llena una estructura <code>WDF_BIND_INFO</code> que contiene la versión del framework (p. ej. <code>1.15</code> o <code>1.33</code>) y un puntero a un puntero global en <code>.data</code>: <code>WdfFunctions</code> (de tipo <code>const WDFFUNCTIONS*</code>), junto con <code>WdfDriverGlobals</code> (<code>PWDF_DRIVER_GLOBALS</code>).</p>
-<ol><li><strong>Patrón en ensamblador x64:</strong></li></ol>
+<ol start="2"><li><strong>Patrón en ensamblador x64:</strong></li></ol>
 <p>Toda llamada a una función <code>Wdf*</code> se compila como una llamada indirecta indexada sobre esa tabla global, pasando siempre <code>WdfDriverGlobals</code> como primer argumento oculto en <code>RCX</code> (lo que desplaza un lugar todos los argumentos documentados de la función):</p>
 <pre><code class="lenguaje-nasm">; Llamada en código C: WdfIoQueueCreate(device, &amp;q, WDF_NO_OBJECT_ATTRIBUTES, WDF_NO_HANDLE);
 mov     rax, cs:WdfFunctions_01015   ; Carga la base de la tabla de punteros KMDF
@@ -96,7 +96,7 @@ lea     r8, [rsp+40h]                ; 3.er arg (R8) : PWDF_IO_QUEUE_CONFIG Conf
 xor     r9d, r9d                     ; 4.º arg (R9) : WDF_NO_OBJECT_ATTRIBUTES
 mov     qword ptr [rsp+20h], 0       ; 5.º arg (stack): Queue (NULL)
 call    qword ptr [rax+4C0h]         ; Offset +0x4C0 (índice 152 * 8) = pfnWdfIoQueueCreate</code></pre>
-<ol><li><strong>Tabla de offsets de funciones críticas en <code>WDFFUNCTIONS</code> (<code>wdffuncenum.h</code>, KMDF 1.15–1.33):</strong></li></ol>
+<ol start="3"><li><strong>Tabla de offsets de funciones críticas en <code>WDFFUNCTIONS</code> (<code>wdffuncenum.h</code>, KMDF 1.15–1.33):</strong></li></ol>
 <div class="tabla"><table>
 <thead><tr>
 <th>Función KMDF (<code>WDFFUNCENUM</code>)</th>
@@ -117,7 +117,7 @@ call    qword ptr [rax+4C0h]         ; Offset +0x4C0 (índice 152 * 8) = pfnWdfI
 <tr><td><code>WdfRequestRetrieveInputBuffer</code></td><td><code>275</code></td><td><code>+0x898</code></td><td><code>+0x44C</code></td><td><code>RDX</code> = <code>Request</code>, <code>R8</code> = <code>MinimumRequiredSize</code>, <code>R9</code> = <code>&amp;Buffer</code></td></tr>
 <tr><td><code>WdfRequestRetrieveOutputBuffer</code></td><td><code>276</code></td><td><code>+0x8A0</code></td><td><code>+0x450</code></td><td><code>RDX</code> = <code>Request</code>, <code>R8</code> = <code>MinimumRequiredSize</code>, <code>R9</code> = <code>&amp;Buffer</code></td></tr>
 </tbody></table></div>
-<ol><li><strong>Tipado rápido en IDA 9.0+ y Ghidra:</strong></li></ol>
+<ol start="4"><li><strong>Tipado rápido en IDA 9.0+ y Ghidra:</strong></li></ol>
 <p>Si asignás el tipo <code>WDFFUNCTIONS*</code> a la variable global <code>WdfFunctions</code> (o importás <code>wdf.h</code> / <code>wdffuncenum.h</code>), el decompilador convierte instantáneamente <code>(*(void (**)(...))(WdfFunctions + 0x4C0))(...)</code> en <code>WdfFunctions-&gt;pfnWdfIoQueueCreate(...)</code>.</p></blockquote>
 <h2 id="práctica">Práctica</h2>
 <p>Revisá el source de tu driver o una muestra didáctica de Microsoft:</p>
@@ -141,7 +141,7 @@ call    qword ptr [rax+4C0h]         ; Offset +0x4C0 (índice 152 * 8) = pfnWdfI
 <p>A diferencia de un ejecutable clásico que lee de <code>stdin</code> o de un archivo, un fuzzer de kernel ejecuta un <strong>harness en espacio de usuario</strong> que interactúa directamente con el objeto de dispositivo del driver:</p>
 <ol><li><strong>Apertura del Dispositivo:</strong> Obtiene un handle con <code>CreateFileW(L"\\.\MiDriver", GENERIC_READ | GENERIC_WRITE, ...)</code> utilizando el enlace simbólico (<em>Symbolic Link</em>) expuesto por el driver.</li><li><strong>Bucle de Mutación de IOCTLs:</strong> Genera o permuta códigos <code>CTL_CODE</code> iterando a través de:</li></ol>
 <ul><li><em>DeviceType:</em> Códigos estándar o reservados (<code>0x8000</code>..<code>0xFFFF</code>).</li><li><em>Function:</em> Rango de índices de función del driver (<code>0x800</code>..<code>0xFFF</code>).</li><li><em>Method:</em> <code>METHOD_BUFFERED</code> (<code>0</code>), <code>METHOD_IN_DIRECT</code> (<code>1</code>), <code>METHOD_OUT_DIRECT</code> (<code>2</code>), <code>METHOD_NEITHER</code> (<code>3</code>).</li></ul>
-<ol><li><strong>Manejo Estricto de Excepciones:</strong> Como el envío de punteros inválidos hacia un driver con <code>METHOD_NEITHER</code> puede provocar un fallo en el propio llamador si no se captura, el harness encapsula <code>DeviceIoControl</code> dentro de un bloque <code>__try / __except</code>.</li></ol>
+<ol start="3"><li><strong>Manejo Estricto de Excepciones:</strong> Como el envío de punteros inválidos hacia un driver con <code>METHOD_NEITHER</code> puede provocar un fallo en el propio llamador si no se captura, el harness encapsula <code>DeviceIoControl</code> dentro de un bloque <code>__try / __except</code>.</li></ol>
 <h3 id="esqueleto-de-código-c-harness-de-fuzzing-de-ioctls">Esqueleto de Código C: Harness de Fuzzing de IOCTLs</h3>
 <pre><code class="lenguaje-c">// Archivo: plantillas_codigo/ioctl_fuzzer_harness.c
 // Compilar con MSVC x64: cl /Zi /O2 ioctl_fuzzer_harness.c /Fe:IoctlFuzzer.exe

@@ -277,9 +277,9 @@ call qword ptr [rax + 910h]        ; Invocación indirecta a pfnWdfRequestSetCom
 <ol><li><strong>Cruce contra <code>nt!PspCidTable</code>:</strong></li></ol>
 <p>En Windows, cada identificador de proceso (PID) y de hilo (TID) se registra obligatoriamente en una tabla de handles interna no exportada del kernel: <strong><code>nt!PspCidTable</code></strong> (de tipo <code>_HANDLE_TABLE</code>).</p>
 <ul><li><code>ActiveProcessLinks</code> es una lista meramente informativa para enumeración.</li><li><code>PspCidTable</code> es la estructura que el kernel consulta cada vez que despacha una llamada o valida un handle de proceso. Si un atacante desvincula un proceso de <code>PspCidTable</code>, el sistema operativo entra inmediatamente en Bugcheck por inconsistencia de scheduler.</li><li><strong>Regla Cross-View:</strong> Si un PID existe en <code>PspCidTable</code> pero no aparece al recorrer <code>ActiveProcessLinks</code>, <strong>el proceso ha sido ocultado mediante DKOM</strong>.</li></ul>
-<ol><li><strong>Cruce VTL0 vs. VTL1 (Secure Kernel):</strong></li></ol>
+<ol start="2"><li><strong>Cruce VTL0 vs. VTL1 (Secure Kernel):</strong></li></ol>
 <p>Bajo Virtualization-Based Security (VBS), el <strong>Secure Kernel</strong> (<code>securekernel.exe</code>) en VTL 1 mantiene su propio inventario de páginas físicas y contextos de ejecución respaldado por las tablas SLAT/EPT del hipervisor. Ningún driver en VTL 0 (incluso con privilegios de kernel absolutos) puede alterar la memoria de VTL 1. Los sensores defensivos de última generación consultan al hipervisor para comparar los contextos de ejecución activos contra la lista visible en VTL 0.</p>
-<ol><li><strong>Telemetría de Kernel <code>ETWti</code>:</strong></li></ol>
+<ol start="3"><li><strong>Telemetría de Kernel <code>ETWti</code>:</strong></li></ol>
 <p>El proveedor <code>Microsoft-Windows-Threat-Intelligence</code> emite eventos inmutables de creación de procesos (<code>PROCESS_CREATE</code>) generados en la ruta nativa <code>nt!PspInsertProcess</code>. Aunque el atacante desvincule el proceso a posteriori en memoria, la traza de auditoría de ETWti ya registró la creación con su PID legítimo.</p>
 <h3 id="script-conceptual-de-windbg-para-detección-cross-view">Script Conceptual de WinDbg para Detección Cross-View</h3>
 <p>El siguiente script en WinDbg compara los procesos enumerados por la lista circular contra los registros de la tabla de identificadores <code>PspCidTable</code>:</p>
@@ -305,7 +305,7 @@ $$ o si Flink-&gt;Blink != EPROCESS, se delata una desvinculación maliciosa (DK
 <h2 id="5-laboratorio-verificado">5. Laboratorio Verificado</h2>
 <ol><li>Inspeccioná la plantilla <code>plantillas_codigo/minifilter_obcallback_min.c</code>. Observá cómo interactúan las estructuras de <code>FLT_REGISTRATION</code> y <code>OB_CALLBACK_REGISTRATION</code>.</li><li>En una sesión de depuración con WinDbg KDNET en tu VM de kernel, ejecutá el script de auditoría completa:</li></ol>
 <pre><code class="lenguaje-text">   $$&gt;&lt;plantillas_codigo\auditar_callbacks.wdbg</code></pre>
-<ol><li>Verificá que la lista de callbacks enumera los drivers de tu entorno y localiza el módulo exacto que atiende la creación de procesos en tu sistema.</li></ol>
+<ol start="3"><li>Verificá que la lista de callbacks enumera los drivers de tu entorno y localiza el módulo exacto que atiende la creación de procesos en tu sistema.</li></ol>
 </main>
 <footer class="pie">
   <p>Material educativo y defensivo. Las prácticas se limitan a programas propios, software abierto o crackmes diseñados para aprender. No se enseña a eludir licencias, DRM ni controles de acceso.</p>

@@ -29,7 +29,7 @@
 <p>Los archivos ejecutables del cargador de arranque de Windows (como <code>bootmgfw.efi</code>, <code>winload.efi</code> y <code>hvloader.efi</code>) no son formatos binarios propietarios exóticos: son archivos estándar <strong>PE32+ (PE de 64 bits)</strong> con características específicas en sus cabeceras:</p>
 <ol><li><strong><code>Subsystem</code> en OptionalHeader:</strong></li></ol>
 <ul><li><code>IMAGE_SUBSYSTEM_EFI_APPLICATION</code> (<code>10</code> / <code>0x000A</code>): Aplicaciones que se ejecutan directamente bajo el entorno UEFI antes de que el sistema operativo tome el control.</li><li><code>IMAGE_SUBSYSTEM_EFI_BOOT_SERVICE_DRIVER</code> (<code>11</code> / <code>0x000B</code>): Controladores DXE que extienden los servicios de arranque de la placa madre.</li></ul>
-<ol><li><strong>Punto de Entrada EFI:</strong></li></ol>
+<ol start="2"><li><strong>Punto de Entrada EFI:</strong></li></ol>
 <p>La función de inicio de un ejecutable EFI recibe siempre dos parámetros estandarizados en la convención x64 de Microsoft:</p>
 <pre><code class="lenguaje-c">   EFI_STATUS EFIAPI EfiMain(
        IN EFI_HANDLE ImageHandle,       // RCX: Handle del binario cargado en memoria
@@ -125,10 +125,10 @@ $$ Volcar la lista de módulos cargados en el arranque
 <h3 id="pasos-de-reversing-para-un-binario-efi">Pasos de Reversing para un Binario <code>.efi</code>:</h3>
 <ol><li><strong>Carga en el Desensamblador:</strong> Seleccionar el formato PE. En Ghidra o IDA Pro, utilizar los tipos de datos de UEFI (importando los headers de EDK2 o utilizando el plugin <em>EFISeek</em> / <em>Ghidra-EFI</em>).</li><li><strong>Localización de <code>SystemTable</code>:</strong></li></ol>
 <p>En el prólogo de <code>EfiMain</code>, identificar la instrucción que salva el registro <code>RDX</code> en una variable global. Ese puntero es <code>gST</code> (<code>EFI_SYSTEM_TABLE</code>). En el offset <strong><code>+0x60</code></strong> de <code>gST</code> reside el puntero a <code>gBS</code> (<code>EFI_BOOT_SERVICES</code>).</p>
-<ol><li><strong>Identificación de Protocolos Hijackeados:</strong></li></ol>
+<ol start="3"><li><strong>Identificación de Protocolos Hijackeados:</strong></li></ol>
 <p>Los bootkits suelen instalar ganchos sobre funciones críticas de <code>EFI_BOOT_SERVICES</code> antes de que se cargue <code>winload.efi</code>:</p>
 <ul><li>Ganchos sobre <strong><code>LocateProtocol</code></strong> o <strong><code>OpenProtocol</code></strong>: interceptan la carga de protocolos para devolver punteros a rutinas modificadas.</li><li>Ganchos sobre <strong><code>ExitBootServices</code></strong>: capturan el momento exacto en que <code>winload.efi</code> va a transferir el control al kernel. En este punto, el bootkit parchea en memoria viva las rutinas de validación de firmas de <code>winload.efi</code> o inyecta código en <code>ntoskrnl!KiSystemStartup</code> para deshabilitar DSE antes de que el kernel arranque.</li></ul>
-<ol><li><strong>Verificación Defensiva:</strong> En sistemas corporativos, la integridad de esta cadena se audita mediante <strong>Measured Boot</strong> (el chip TPM registra los hashes SHA-256 de cada componente de arranque en los registros PCR 0 a 7, permitiendo a la red verificar remotamente que ningún binario EFI fue alterado).</li></ol>
+<ol start="4"><li><strong>Verificación Defensiva:</strong> En sistemas corporativos, la integridad de esta cadena se audita mediante <strong>Measured Boot</strong> (el chip TPM registra los hashes SHA-256 de cada componente de arranque en los registros PCR 0 a 7, permitiendo a la red verificar remotamente que ningún binario EFI fue alterado).</li></ol>
 </main>
 <footer class="pie">
   <p>Material educativo y defensivo. Las prácticas se limitan a programas propios, software abierto o crackmes diseñados para aprender. No se enseña a eludir licencias, DRM ni controles de acceso.</p>

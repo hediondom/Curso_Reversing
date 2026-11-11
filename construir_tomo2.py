@@ -18,7 +18,7 @@ MODULES_DIR = os.path.join(THIS_DIR, "_trabajo")
 DST_GUIA = REPO_ROOT
 ARTIFACT_DIR = r"C:\Users\agust\.gemini\antigravity\brain\5f78e7db-99bc-4011-8024-f93ab7c13c8f"
 MIRROR_LOCAL = r"D:\Guia\CLS_Guia_Gemini"
-PENDRIVE_USB = r"E:\\"
+PENDRIVE_USB = ""
 
 sys.path.insert(0, REPO_ROOT)
 from construir_suite import (

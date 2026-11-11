@@ -84,7 +84,7 @@ MIDL_SERVER_INFO:
 <p>El compilador MIDL genera secuencias de bytes compactas que codifican los parámetros de cada método mediante la máquina de tipos de <strong>NDR (Network Data Representation)</strong>:</p>
 <ol><li><strong>Cabecera de Procedimiento:</strong> En <code>ProcFormatString</code>, cada rutina arranca con una cabecera de 6 bytes en modo <code>-Oicf</code> que define el tamaño del marco en la pila (<code>stack_size</code>) y el número de parámetros.</li><li><strong>Descriptores de Parámetros (6 bytes por parámetro):</strong></li></ol>
 <ul><li><strong>Flags de Dirección:</strong> Los primeros 2 bytes indican si el parámetro es entrante o saliente (<code>0x0048</code> = <code>[in]</code>, <code>0x0158</code> = <code>[out]</code>, <code>0x0050</code> = <code>[in, out]</code>).</li><li><strong>Offset en el Stack:</strong> Los siguientes 2 bytes indican la posición relativa en el marco de la llamada.</li><li><strong>Descriptor de Tipo:</strong> Los 2 bytes finales contienen el tipo básico (<code>FC_LONG = 0x08</code>, <code>FC_HYPER = 0x0b</code>, <code>FC_CHAR = 0x02</code>) o un offset relativo hacia <strong><code>TypeFormatString</code></strong> (almacenado en <code>MIDL_STUB_DESC+0x28</code>).</li></ul>
-<ol><li><strong>Tipos Complejos en <code>TypeFormatString</code>:</strong></li></ol>
+<ol start="3"><li><strong>Tipos Complejos en <code>TypeFormatString</code>:</strong></li></ol>
 <ul><li><code>0x11</code> (<code>FC_RP</code>): Puntero de referencia (no puede ser nulo).</li><li><code>0x12</code> (<code>FC_UP</code>): Puntero único (puede ser nulo).</li><li><code>0x21</code> (<code>FC_C_CSTRING</code>): Cadena ASCII conformante terminada en nulo (<code>char*</code>).</li><li><code>0x22</code> (<code>FC_C_WSTRING</code>): Cadena UTF-16 conformante terminada en nulo (<code>wchar_t*</code>).</li><li><code>0x1A</code> (<code>FC_BOGUS_STRUCT</code>): Estructura compleja con alineación manual y punteros anidados.</li></ul>
 <p>El laboratorio <code>plantillas_codigo/rpc_com_server_lab.c</code> y su definición <code>rpc_com_server_lab.idl</code> permiten compilar un servidor local sobre <code>ncalrpc</code> y verificar la disposición exacta de estas tablas en memoria.</p>
 <h2 id="alpc">ALPC</h2>
@@ -114,7 +114,7 @@ Seguridad: ACL permite al usuario de la sesión; no acepta datos arbitrarios</co
 <p>Aunque ALPC (<em>Advanced Local Procedure Call</em>) es una interfaz interna de <code>ntdll.dll</code>, el analista necesita saber reconocer sus llamadas en un binario y auditar qué procesos están conectados a un puerto local durante una sesión de depuración (<em>Windows Internals 7th Ed., Cap. 3 / extensión <code>!alpc</code> de WinDbg</em>) (<strong>Hecho confirmado</strong>):</p>
 <ol><li><strong>Las tres primitivas de <code>ntdll.dll</code> y el espacio de nombres <code>\RPC Control\</code>:</strong></li></ol>
 <ul><li><strong>Servidor:</strong> Llama a <code>ntdll!NtAlpcCreatePort(&amp;PortHandle, &amp;ObjectAttributes, &amp;PortInformation)</code> publicando un objeto de tipo <code>ALPC Port</code> en el directorio del Object Manager (casi siempre bajo <code>\RPC Control\&lt;NombreDelPuerto&gt;</code> o <code>\Sessions\&lt;N&gt;\BaseNamedObjects\...</code>).</li><li><strong>Cliente:</strong> Se conecta con <code>ntdll!NtAlpcConnectPort</code> (o <code>NtAlpcConnectPortEx</code>) especificando el <code>UNICODE_STRING</code> del puerto destino.</li><li><strong>Intercambio de mensajes:</strong> Ambos lados usan <code>ntdll!NtAlpcSendWaitReceivePort(PortHandle, Flags, SendMessage, SendMessageAttributes, ReceiveMessage, &amp;BufferLength, ReceiveMessageAttributes, Timeout)</code>.</li></ul>
-<ol><li><strong>Cabecera <code>PORT_MESSAGE</code> en memoria (<code>+0x00..+0x27</code>, 40 bytes en x64 / 24 bytes en x86):</strong></li></ol>
+<ol start="2"><li><strong>Cabecera <code>PORT_MESSAGE</code> en memoria (<code>+0x00..+0x27</code>, 40 bytes en x64 / 24 bytes en x86):</strong></li></ol>
 <p>Todo mensaje enviado o recibido por ALPC comienza con una cabecera fija <code>PORT_MESSAGE</code> seguida inmediatamente por los datos de la aplicación:</p>
 <pre><code class="lenguaje-c">typedef struct _PORT_MESSAGE_X64 {
 USHORT DataLength;     // +0x00 (2B): Bytes útiles del payload después de esta cabecera
@@ -127,7 +127,7 @@ ULONG  MessageId;      // +0x18 (4B): ID correlativo del mensaje
 ULONG  Reserved;       // +0x1C (4B)
 ULONG_PTR ClientViewSize; // +0x20 (8B): Total cabecera = 0x28 (40 bytes en x64)
 } PORT_MESSAGE_X64;</code></pre>
-<ol><li><strong>Comandos de inspección en solo lectura (Sysinternals y WinDbg de kernel):</strong></li></ol>
+<ol start="3"><li><strong>Comandos de inspección en solo lectura (Sysinternals y WinDbg de kernel):</strong></li></ol>
 <pre><code class="lenguaje-text"># En user-mode (consola elevada en la VM): listar todos los puertos ALPC abiertos y su proceso dueño
 handle.exe -a -p &lt;PID_o_nombre&gt; "ALPC Port"
 

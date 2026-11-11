@@ -44,7 +44,7 @@ Para operar de forma soberana en una estación de trabajo de ingeniería inversa
 * **LM Studio:** Entorno con interfaz gráfica que incluye servidor local con compatibilidad de API OpenAI (`http://localhost:1234/v1`).
 
 ### B. Selección de Modelos Cuantizados para Reversing
-Para tareas de comprensión de código ensamblador y descompilación en C, los modelos de propósito general conversacional (tipo chat estándar) suelen alucinar o producir respuestas prolixas. Se deben utilizar modelos **especializados en programación (*coder models*)** en formatos cuantizados GGUF (4 bits u 8 bits):
+Para tareas de comprensión de código ensamblador y descompilación en C, los modelos de propósito general conversacional (tipo chat estándar) suelen alucinar o producir respuestas prolijas y verbosas. Se deben utilizar modelos **especializados en programación (*coder models*)** en formatos cuantizados GGUF (4 bits u 8 bits):
 
 | Modelo Local | Parámetros | Formato / Cuantización | VRAM Requerida | Perfil de Rendimiento |
 |---|---|---|---|---|

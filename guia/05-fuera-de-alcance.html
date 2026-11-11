@@ -23,17 +23,16 @@
 </header>
 <main id="contenido">
 <nav class="migas" aria-label="Ubicación"><a href="../00_EMPEZAR_AQUI.html">Inicio</a><span aria-hidden="true">›</span><a href="../guia/index.html">Curso</a><span aria-hidden="true">›</span><span>Etapa 5 · Ramas opcionales</span></nav><h1 id="kernel-y-otros-territorios-qué-queda-fuera-y-por-qué">Kernel y otros territorios: qué queda fuera y por qué</h1>
-<aside class="callout nota"><p class="callout-titulo">Objetivo de la lección</p><p>Al terminar vas a poder explicar por qué el kernel, el desempaquetado de protectores comerciales, el exploiting contra terceros y <strong>otras plataformas (Linux, macOS, Android, ARM)</strong> no forman parte de esta edición, y qué prerequisites harían falta para abordarlos.</p></aside>
-<aside class="callout aviso"><p class="callout-titulo">Esta edición es solo Windows</p><p>Por decisión de alcance, la guía cubre <strong>únicamente binarios de Windows</strong> (PE, x86/x64). El reversing de <strong>Linux/ELF</strong>, <strong>macOS/Mach-O</strong>, <strong>Android (APK/DEX)</strong> y arquitecturas como <strong>ARM/AArch64</strong> queda <strong>fuera</strong>. Los conceptos de base (números, memoria, stack, flujo, método) se trasladan a esas plataformas, pero su formato, convenciones y herramientas son otro mundo y merecen su propio material.</p></aside>
+<aside class="callout nota"><p class="callout-titulo">Objetivo de la lección</p><p>Al terminar vas a poder explicar por qué el desempaquetado de protectores comerciales, la explotación contra terceros y otras plataformas operativas (Linux, macOS, Android) quedan fuera de este curso, y qué prerrequisitos se exigen antes de pasar al <strong>Tomo II (Kernel e Internals)</strong> y al <strong>Tomo III (LLVM, Rust, Go, Contenedores e IA)</strong>.</p></aside>
+<aside class="callout aviso"><p class="callout-titulo">Esta obra está centrada en Windows</p><p>Por decisión de alcance, el curso se enfoca en binarios de <strong>Windows</strong> (PE, x86/x64 y ARM64EC en Windows 11). El reversing de <strong>Linux/ELF</strong>, <strong>macOS/Mach-O</strong> y <strong>Android (APK/DEX)</strong> queda fuera. Los fundamentos (números, memoria, stack, flujo de control y método) se trasladan directamente a esas plataformas, pero sus formatos ejecutables, convenciones de llamada al sistema y herramientas merecen un tratado específico.</p></aside>
 <p><strong>Prerrequisitos:</strong> etapas 0 a 4. <strong>Duración sugerida:</strong> 30 minutos (lectura y reflexión).</p>
-<h2 id="una-guía-también-se-define-por-lo-que-no-incluye">Una guía también se define por lo que no incluye</h2>
-<p>El corpus de reversing tiene material de kernel, protectores comerciales, exploiting y malware. No todo se convierte en lección. Algunos temas quedan fuera por tres razones:</p>
-<ol><li><strong>No hay material revisado.</strong> Hay contenedores que no se abrieron; una mención no es contenido.</li><li><strong>El riesgo no es proporcional al beneficio para un principiante.</strong> Enseñar a manipular kernel o protectores sin bases sólidas produce accidentes, no aprendizaje.</li><li><strong>El marco legal y ético.</strong> Eludir protecciones de software comercial o atacar sistemas ajenos no es educativo.</li></ol>
-<h2 id="kernel">Kernel</h2>
-<p>Un módulo de kernel corre en el nivel más privilegiado del sistema. Un error ahí no crashea una aplicación: crashea la máquina, corrompe el sistema o abre una puerta que no se cierra con un reinicio.</p>
-<p>Para abordar kernel con responsabilidad hacen falta, como mínimo:</p>
-<ul><li>C y ensamblador con soltura.</li><li>Entender la memoria virtual, la paginación y las estructuras del sistema operativo.</li><li>Un laboratorio con snapshots y, preferentemente, hardware o VM descartable.</li><li>Un objetivo defensivo claro: analizar un driver, entender una mitigación, revisar una vulnerabilidad con permiso.</li></ul>
-<p>En las guías tradicionales de reversing de user-mode no suele haber un módulo estructurado de kernel. El mapa menciona material de exploiting y de drivers, pero no se verificó. Esta guía no lo convierte en una lección de principiante.</p>
+<h2 id="una-guía-también-se-define-por-lo-que-no-incluye">Una guía también se define por sus límites</h2>
+<p>Un curso riguroso de ingeniería inversa distingue qué temas pertenecen al tronco formativo, cuáles requieren tomos avanzados dedicados y cuáles quedan excluidos por criterios éticos, legales o de seguridad:</p>
+<ol><li><strong>Progresión pedagógica y control de riesgos.</strong> Abordar drivers de kernel o virtualización sin dominar primero C, ensamblador x64, estructuras PE y depuración de modo usuario produce accidentes, no aprendizaje. Por eso el análisis de modo kernel se separa en el <strong>Tomo II</strong> con un laboratorio dedicado de doble VM.</li><li><strong>Verificación técnica.</strong> Cada técnica incluida en la obra se apoya en documentación oficial verificable y prácticas reproducibles sobre binarios propios o de estudio.</li><li><strong>Marco legal y ético.</strong> Eludir licencias o protecciones de software comercial o atacar sistemas de terceros es ajeno al propósito educativo y defensivo de esta obra.</li></ol>
+<h2 id="kernel">Puente hacia el Tomo II: Kernel e Internals</h2>
+<p>Un módulo de kernel corre en el nivel más privilegiado del sistema (Ring 0). Un error ahí no cierra una ventana de aplicación: detiene el sistema operativo completo (BSOD) o compromete la integridad de toda la máquina.</p>
+<p>Antes de pasar al <strong>Tomo II (Etapa 6 · Kernel y drivers Windows en laboratorio)</strong>, asegurate de contar con:</p>
+<ul><li>Lectura fluida de C y ensamblador x86/x64.</li><li>Comprensión sólida de memoria virtual, paginación, PE, TEB/PEB y llamadas a través de <code>ntdll.dll</code>.</li><li>Un laboratorio con snapshots y dos máquinas virtuales (Host/Debugger + Target/Debuggee).</li><li>Un objetivo defensivo claro: analizar drivers propios o didácticos, comprender mitigaciones (HVCI, PatchGuard, DSE) y auditar superficie de ataque (<code>IRP_MJ_DEVICE_CONTROL</code>) con permiso.</li></ul>
 <h2 id="protectores-comerciales">Protectores comerciales</h2>
 <p>El desempaquetado de protectores como Themida, WinLicense o ACProtect aparece en el corpus (por ejemplo, el RAR de Themida + WinLicense y los capítulos de ACProtect). Es material avanzado y, en muchos casos, orientado a modificar software comercial.</p>
 <p>Esta guía explica <strong>qué es</strong> un empacador, cómo se reconoce y por qué el código queda plano en memoria en algún momento. No enseña a desempaquetar protectores comerciales, no distribuye recetas y no propone esas tareas. El capítulo 35 (inline patching sobre ACProtect) se cita solo como evidencia de que la técnica existe; no se reproduce.</p>
@@ -41,36 +40,35 @@
 <p>Los ejercicios de vulnerabilidades de esta guía se limitan a programas propios o laboratorios deliberadamente vulnerables, con permiso. No se enseña a atacar sistemas ajenos, a evadir defensas de terceros ni a mantener acceso.</p>
 <p>Si tu objetivo es la seguridad ofensiva profesional, el camino incluye:</p>
 <ul><li>Fundamentos de redes y sistemas.</li><li>Programación y análisis de binarios.</li><li>Laboratorios legales (por ejemplo, entornos de práctica diseñados para eso).</li><li>Certificaciones y programas con alcance definido.</li><li>Ética y divulgación responsable.</li></ul>
-<h2 id="otros-temas-del-corpus-que-quedan-como-referencia">Otros temas del corpus que quedan como referencia</h2>
+<h2 id="otros-temas-del-corpus-que-quedan-como-referencia">Mapa de alcance de la obra completa</h2>
 <div class="tabla"><table>
 <thead><tr>
 <th>Tema</th>
-<th>Estado en esta edición</th>
+<th>Ubicación / Estado en la obra</th>
 </tr></thead><tbody>
-<tr><td>Android (APK/DEX)</td><td><strong>Fuera de alcance</strong>: edición solo Windows</td></tr>
-<tr><td>Linux/ELF</td><td><strong>Fuera de alcance</strong>: edición solo Windows</td></tr>
-<tr><td>macOS/Mach-O</td><td><strong>Fuera de alcance</strong>: edición solo Windows</td></tr>
-<tr><td>ARM/AArch64 y otras arquitecturas</td><td><strong>Fuera de alcance</strong>: edición solo Windows (x86/x64)</td></tr>
-<tr><td>Malware</td><td>Triage estático defensivo de Windows; ejecución <strong>fuera de alcance</strong></td></tr>
-<tr><td>Vulnerabilidades</td><td>Concepto y mitigación en laboratorio propio; exploit <strong>fuera de alcance</strong></td></tr>
-<tr><td>Kernel/drivers (Windows)</td><td>Rama <a href="etapa-6.html">optativa Etapa 6</a>: drivers propios/didácticos en VM descartable; no rootkits, BYOVD, explotación ni evasión de mitigaciones</td></tr>
-<tr><td>Protectores comerciales</td><td><strong>Fuera de alcance</strong> por marco legal y ético</td></tr>
-<tr><td>Automatización</td><td>Rama con IDAPython/Ghidra; módulos avanzados <strong>pendientes</strong></td></tr>
+<tr><td>Android (APK/DEX), Linux (ELF), macOS (Mach-O)</td><td><strong>Fuera de alcance</strong>: obra enfocada en Windows</td></tr>
+<tr><td>ARM64 / ARM64EC en Windows 11</td><td>Cubierto en la <strong>Lección 2.35</strong> de este Tomo I</td></tr>
+<tr><td>Malware</td><td>Triage estático defensivo en Windows (Lección 5.1); ejecución de muestras reales <strong>fuera de alcance</strong></td></tr>
+<tr><td>Vulnerabilidades</td><td>Concepto, auditoría y mitigación en laboratorio propio (Lección 5.2); explotación contra terceros <strong>fuera de alcance</strong></td></tr>
+<tr><td>Kernel, drivers e internals de Windows</td><td>Desarrollado en el <strong>Tomo II (Etapa 6)</strong> con laboratorio de doble VM</td></tr>
+<tr><td>C++ moderno, Rust, Go, LLVM/MBA, VMs e IA</td><td>Desarrollado en el <strong>Tomo III (Frontera Moderna)</strong></td></tr>
+<tr><td>Desempaquetado de protectores comerciales para eludir licencias</td><td><strong>Fuera de alcance</strong> por marco legal y ético</td></tr>
+<tr><td>Automatización</td><td>IDAPython, Ghidra API, radare2/r2pipe y Binary Ninja (Lección 5.3) + SMT/angr/Triton en el <strong>Tomo III</strong></td></tr>
 </tbody></table></div>
 <h2 id="práctica">Práctica</h2>
-<ol><li>Elegí un tema de la tabla que te interese y escribí qué prerequisites te faltan.</li><li>Buscá en el corpus un recurso de ese tema y anotá si está leído o pendiente.</li><li>Escribí una regla personal: "no voy a analizar X hasta poder Y".</li><li>Revisá tu bitácora: ¿hay alguna práctica que hayas hecho sin permiso o sin aislamiento? Corregila.</li></ol>
+<ol><li>Elegí uno de los temas avanzados del Tomo II o del Tomo III y anotá qué prerrequisitos del Tomo I ya dominás y cuáles necesitás repasar.</li><li>Escribí una regla personal de trabajo en tu bitácora: «No voy a pasar a analizar X hasta haber practicado y documentado Y».</li><li>Revisá tu bitácora del Tomo I: verificá que cada ejercicio haya quedado documentado con hash, entorno y evidencia reproducible.</li></ol>
 <h2 id="preguntas-de-repaso">Preguntas de repaso</h2>
-<p><strong>1. ¿Por qué el kernel queda fuera?</strong> Por el nivel de privilegio, el riesgo de daño y la falta de material revisado y de prerequisites en esta edición.</p>
-<p><strong>2. ¿Qué diferencia hay entre explicar un empacador y desempaquetar un protector comercial?</strong> Explicar es conceptual y defensivo; desempaquetar un protector comercial para modificar el programa queda fuera del marco legal y ético de esta guía.</p>
-<p><strong>3. ¿Qué hace falta para practicar exploiting de forma responsable?</strong> Un laboratorio propio o autorizado, un objetivo definido, permisos y un plan de divulgación.</p>
-<p><strong>4. ¿Una mención en el corpus alcanza para dar una lección?</strong> No. Una mención o un título no demuestran el contenido. Primero hay que leerlo y verificarlo.</p>
-<h2 id="antes-de-cerrar">Antes de cerrar</h2>
+<p><strong>1. ¿Por qué el análisis de kernel se separa del tronco inicial?</strong> Por el nivel de privilegio (Ring 0), el impacto de cualquier fallo sobre todo el sistema y la necesidad de dominar primero el modo usuario y el laboratorio de doble VM.</p>
+<p><strong>2. ¿Qué diferencia hay entre estudiar la arquitectura de un empacador y desempaquetar un protector comercial de terceros?</strong> Estudiar cómo funciona la compresión, la entropía, la reconstrucción de IAT o una VM de bytecode es formativo y defensivo; modificar software comercial para eludir controles de licencia queda fuera del marco legal y ético de la obra.</p>
+<p><strong>3. ¿Qué hace falta para practicar auditoría de vulnerabilidades de forma responsable?</strong> Un laboratorio propio o autorizado, un objetivo definido, permisos explícitos y respeto por los procesos de divulgación coordinada.</p>
+<p><strong>4. ¿Cuándo conviene pasar al Tomo II o al Tomo III?</strong> Cuando puedas completar sin ayuda un informe de análisis de la Etapa 4 sobre un binario nativo y uno administrado.</p>
+<h2 id="antes-de-cerrar">Antes de cerrar el Tomo I</h2>
 <p>Tenés que poder:</p>
-<ul><li>Explicar por qué no todo el corpus se convierte en curso.</li><li>Nombrar los prerequisites de kernel.</li><li>Decir qué temas quedan como referencia y cuáles como pendientes.</li></ul>
-<aside class="callout nota"><p class="callout-titulo">Cierre del recorrido</p><p>Si llegaste hasta acá con las etapas 0 a 4 completas, tenés una base real de reversing. Las ramas son opcionales: elegí una, completá su práctica y documentala. No acumules temas: acumulá evidencia.</p></aside>
+<ul><li>Explicar el alcance ético, legal y técnico del curso.</li><li>Nombrar los prerrequisitos necesarios antes de abordar el Tomo II (Kernel) y el Tomo III (Frontera Moderna).</li><li>Identificar qué ramas optativas se adaptan mejor a tu objetivo profesional.</li></ul>
+<aside class="callout nota"><p class="callout-titulo">Cierre del Tomo I</p><p>Si llegaste hasta acá con las etapas 0 a 4 completas, tenés una base sólida y verificable de ingeniería inversa en Windows. Las secciones siguientes de este tomo reúnen los catálogos de referencia, glosario y autoevaluación antes de dar el salto al Tomo II y al Tomo III.</p></aside>
 <h2 id="fuentes-de-esta-lección">Fuentes de esta lección</h2>
-<ul><li><a class="fuente" href="../../CLS_resultados_intermedios/mapa_carpetas_etapas.csv">mapa_carpetas_etapas.csv</a> — asignación de temas y notas sobre kernel/exploiting.</li><li><a class="fuente" href="../../telegram/Themida%20%2B%20WinLicense%202.x%20%28Unpacking%29.rar">Themida + WinLicense 2.x (Unpacking).rar</a> — recurso <strong>excluido</strong> del recorrido base.</li><li><a class="fuente" href="../../CLS_resultados_intermedios/transcripciones/extraidos/Reversing%20desde%20cero%20%28Ricardo%20y%20Solid%29/Ricardo%20Narvaja%20y%20Solid%20-%20Reversing%20desde%20cero_35%20C%C3%B3mo%20parchear%20un%20programa%20empacado%20-%20In%20Line%20Patching_35%20C%C3%B3mo%20parchear%20un%20programa%20empacado%20-%20In%20Lin.txt">Reversing desde cero, cap. 35</a> — evidencia de la técnica de inline patching; <strong>no se reproduce</strong>.</li><li><a class="fuente" href="../../CLS_Guia/FUENTES_Y_LIMITES.md">FUENTES_Y_LIMITES.md</a> — criterios de exclusión de esta edición.</li></ul>
-<aside class="callout nota"><p class="callout-titulo">Capas de esta lección</p><p><strong>Núcleo conceptual:</strong> la existencia de los recursos y su clasificación en el mapa. <strong>Conocimiento externo:</strong> requisitos de kernel y explotación responsable. <strong>Recomendación editorial:</strong> los límites y la tabla de estado.</p></aside>
+<ul><li><a class="fuente" href="../../CLS_resultados_intermedios/transcripciones/extraidos/Reversing%20desde%20cero%20%28Ricardo%20y%20Solid%29/Ricardo%20Narvaja%20y%20Solid%20-%20Reversing%20desde%20cero_35%20C%C3%B3mo%20parchear%20un%20programa%20empacado%20-%20In%20Line%20Patching_35%20C%C3%B3mo%20parchear%20un%20programa%20empacado%20-%20In%20Lin.txt">Reversing desde cero, cap. 35</a> — referencia documental sobre empaquetadores; <strong>no se reproduce sobre software comercial</strong>.</li><li><a class="fuente" href="../FUENTES_Y_LIMITES.md">FUENTES_Y_LIMITES.md</a> — criterios metodológicos y de alcance de esta edición.</li></ul>
+<aside class="callout nota"><p class="callout-titulo">Síntesis de estudio de esta lección</p><p><strong>Núcleo conceptual:</strong> criterios de alcance técnico, seguridad de laboratorio y marco ético-legal. <strong>Conexión con el resto de la obra:</strong> puente estructurado hacia el Tomo II (Kernel e Internals) y el Tomo III (LLVM, Rust, Go, Contenedores e IA).</p></aside>
 </main>
 <footer class="pie">
   <p>Material educativo y defensivo. Las prácticas se limitan a programas propios, software abierto o crackmes diseñados para aprender. No se enseña a eludir licencias, DRM ni controles de acceso.</p>

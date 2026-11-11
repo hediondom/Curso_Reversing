@@ -45,7 +45,7 @@ def inline(text):
 
     text = re.sub(r"`([^`]+)`", guardar, text)
     text = esc(text)
-    text = re.sub(r"\*\*([^*]+)\*\*", r"<strong>\1</strong>", text)
+    text = re.sub(r"\*\*((?:(?!\*\*).)+)\*\*", r"<strong>\1</strong>", text)
     text = re.sub(r"(?<!\*)\*([^*\n]+)\*(?!\*)", r"<em>\1</em>", text)
     text = re.sub(r"\[([^\]]+)\]\(([^)]+)\)", _enlace, text)
 
@@ -177,11 +177,13 @@ def md(texto):
 
         if re.match(r"^\d+\. ", s):
             cerrar()
+            first_num = int(re.match(r"^(\d+)\. ", s).group(1))
             items = []
             while i < len(lineas) and re.match(r"^\d+\. ", lineas[i].strip()):
                 items.append(re.sub(r"^\d+\. ", "", lineas[i].strip()))
                 i += 1
-            out.append("<ol>" + "".join(f"<li>{inline(x)}</li>" for x in items) + "</ol>")
+            start_attr = f' start="{first_num}"' if first_num > 1 else ""
+            out.append(f"<ol{start_attr}>" + "".join(f"<li>{inline(x)}</li>" for x in items) + "</ol>")
             continue
 
         if s.startswith(">"):

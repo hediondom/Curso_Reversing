@@ -8,7 +8,7 @@ Guía profesional y exhaustiva de ingeniería inversa, reversing de binarios, se
 
 La obra se organiza en **tres tomos complementarios**, una **separata de referencia rápida** para el escritorio y un **volumen maestro digital consolidado**:
 
-1. **Tomo I · Tronco y Apoyo (Fundamentos a Especialización — 410 págs.):**
+1. **Tomo I · Tronco y Apoyo (Fundamentos a Especialización — 416 págs.):**
    - **Etapa 0:** Entorno de laboratorio aislado, herramientas y metodología segura.
    - **Etapa 1:** Fundamentos de bajo nivel, representación numérica, memoria, stack, ciclo de vida de procesos y formato PE.
    - **Etapa 2:** Dominio del desensamblado y depuración (IDA Pro, Ghidra, x64dbg, WinDbg), flujo de control, llamadas, optimizaciones del compilador, TLS callbacks, MFC, packers didácticos y taxonomía anti-análisis.
@@ -54,7 +54,7 @@ Para evitar sobrecargar los lomos y asegurar un paso de hoja completamente fluid
 | **3. Tomo II** | `Tomo_2_Kernel_e_Internals.pdf` | **198 págs.** | **99 hojas** | Anillado metálico Ring Wire con tapa dura/polipropileno |
 | **4. Tomo III** | `Tomo_3_LLVM_Rust_Contenedores_IA.pdf` | **52 págs.** | **26 hojas** | Anillado metálico Ring Wire con tapa dura/polipropileno |
 | **5. Separata de Escritorio** | `Separata_Escritorio.pdf` | **18 págs.** | **9 hojas** | Anillado fino o cuadernillo abrochado a caballete |
-| **TOTAL FÍSICO** | **5 volúmenes encuadernados** | **678 págs.** | **339 hojas** | **100 % Paridad Par (Doble Faz)** |
+| **TOTAL FÍSICO** | **5 volúmenes encuadernados** | **684 págs.** | **342 hojas** | **100 % Paridad Par (Doble Faz)** |
 
 ### 📑 Volumen Maestro Digital Unificado (Lectura en Pantalla / Tablet)
 
@@ -110,6 +110,6 @@ El proyecto cuenta con scripts en Python para la regeneración y verificación d
 - **Edición:** Trilogía Completa (Tomos I, II y III)
 - **Revisión:** 5.5 (Estándar Industrial y Editorial Consolidado)
 - **Fecha:** Noviembre de 2026
-- **Total Físico de Imprenta:** 678 páginas (339 hojas doble faz en 5 volúmenes)
-- **Total Digital Maestro:** 660 páginas (330 hojas unificadas)
+- **Total Físico de Imprenta:** 684 páginas (342 hojas doble faz en 5 volúmenes)
+- **Total Digital Maestro:** 666 páginas (333 hojas unificadas)
 - **Estado de Auditoría:** 100 % aprobado (0 destinos rotos, 0 errores de maquetación, paridad par garantizada, alto contraste verificado).

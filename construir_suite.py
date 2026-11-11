@@ -246,7 +246,7 @@ struct AFX_MSGMAP {
 <thead><tr><th>Formato de publicación</th><th>Estructura del PE</th><th>¿Conserva IL y metadatos?</th><th>Cómo analizarlo</th></tr></thead>
 <tbody>
 <tr><td><strong>Single-File Deployment</strong> (<code>PublishSingleFile</code>)</td><td><code>apphost.exe</code> nativo que lleva concatenado un <em>Bundle</em> con las <code>.dll</code> administradas (marcador <code>.net bundle</code> / <code>hostfxr</code>).</td><td><strong>Sí</strong>, completos dentro de las DLLs embebidas.</td><td>Abrirlo directamente en <strong>ILSpy 8.x/9.x</strong>, que extrae y decompila las DLLs del bundle.</td></tr>
-<tr><td><strong>ReadyToRun (R2R)</strong> (<code>PublishReadyToRun</code>)</td><td>PE con cabecera CLR cuyo <code>ManagedNativeHeader</code> apunta a <code>READYTORUN_HEADER</code> (firma <code>0x00525452</code> = <code>"RTR\0"</code>).</td><td><strong>Sí</strong>, conserva el IL original junto al código nativo precompilado.</td><td>Se lee como C#/IL normal en ILSpy o dnSpyEx.</td></tr>
+<tr><td><strong>ReadyToRun (R2R)</strong> (<code>PublishReadyToRun</code>)</td><td>PE con cabecera CLR cuyo <code>ManagedNativeHeader</code> apunta a <code>READYTORUN_HEADER</code> (firma <code>0x00525452</code> = <code>"RTR\\0"</code>).</td><td><strong>Sí</strong>, conserva el IL original junto al código nativo precompilado.</td><td>Se lee como C#/IL normal en ILSpy o dnSpyEx.</td></tr>
 <tr><td><strong>Native AOT</strong> (<code>PublishAot</code>)</td><td>PE 100 % nativo compilado con <code>ilc</code>, sin JIT ni bundle de IL.</td><td><strong>No hay IL</strong>.</td><td>Se analiza como nativo en IDA o Ghidra.</td></tr>
 </tbody></table></div>
 </aside>
@@ -1381,7 +1381,7 @@ def generar_tomos_y_separata(ctx):
     partes_t1 = [f'<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Curso de Reversing en Windows — Tomo I</title><style>{css}\n{css_print}</style></head><body><main>']
     partes_t1.append("""
 <section class="print-sec portada-pdf" id="portada">
-<p class="kicker">Ingeniería Inversa en Windows · Edición Libre y Abierta · Revisión 5.4 (Ampliada) · TOMO I DE II</p>
+<p class="kicker">Ingeniería Inversa en Windows · Edición Libre y Abierta · Revisión 5.4 (Ampliada) · TOMO I DE III</p>
 <h1>Curso de reversing<br><span style="font-size: 20pt; font-weight: 600; color: #0b5f6b;">Tomo I · Tronco Principal (Etapas 0 a 5) y Material de Apoyo</span></h1>
 <p class="sub">De los fundamentos al análisis guiado en user-mode: arquitectura x86/x64, formato PE y DLLs (ciclo de vida y sideloading), IDA, Ghidra, x64dbg (flujo táctico y extracción masiva de strings), reversing de Go y Rust, evasión en user-mode (API hooking, direct/indirect syscalls y call stack spoofing), inyección de procesos en memoria, criptografía híbrida y APIs nativas (CryptoAPI/CNG), .NET, C++ profundo, WinDbg/TTD, malware y vulnerabilidades.</p>
 <p class="sub"><strong>Contenido de este volumen (Tomo I):</strong> Apertura y 3 Rutas de Estudio · Etapas 0, 1, 2 (2A, 2B, 2C, bloque avanzado 2E con 2.25–2.35, y optativas 2.22–2.24), 3, 4 (incluida 4.6 Protocolos de terceros) y 5 · Hilo conductor multi-nivel y Kit de 15 plantillas y laboratorios · 3 Hojas de referencia rápida (<em>Cheat Sheets</em>, con la Hoja 3.4 de desofuscación y DBI) · Glosario · Preguntas y respuestas · Fuentes y límites.</p>
@@ -1419,8 +1419,8 @@ def generar_tomos_y_separata(ctx):
     toc_t1.append(t1_row("fuentes", "Fuentes y límites"))
     toc_t1.append('</ol>')
     toc_t1.append('<div class="etapa" style="margin-top:10pt; color:#555;">En el Tomo II (Ramas Especializadas)</div><ol>')
-    toc_t1.append('<li><span>Etapa 6 · Kernel y drivers en Windows (6.1 a 6.7)</span><span class="toc-pag">ver Tomo II</span></li>')
-    toc_t1.append('<li><span>Rama 2D · Windows internals y Hyper-V (2D.1 a 2D.15)</span><span class="toc-pag">ver Tomo II</span></li>')
+    toc_t1.append('<li><span>Etapa 6 · Kernel y drivers en Windows (6.1 a 6.10)</span><span class="toc-pag">ver Tomo II</span></li>')
+    toc_t1.append('<li><span>Rama 2D · Windows internals y Hyper-V (2D.1 a 2D.17)</span><span class="toc-pag">ver Tomo II</span></li>')
     toc_t1.append('</ol></div></section>')
     partes_t1.append("".join(toc_t1))
 

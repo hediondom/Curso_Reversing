@@ -19,7 +19,7 @@ SRC_TOMO3 = os.path.join(MODULES_DIR, "src", "tomo3")
 DST_GUIA = REPO_ROOT
 ARTIFACT_DIR = r"C:\Users\agust\.gemini\antigravity\brain\5f78e7db-99bc-4011-8024-f93ab7c13c8f"
 MIRROR_LOCAL = r"D:\Guia\CLS_Guia_Gemini"
-PENDRIVE_USB = r"E:\\"
+PENDRIVE_USB = ""
 
 sys.path.insert(0, REPO_ROOT)
 from construir_suite import (
@@ -47,7 +47,7 @@ def inline(text):
 
     text = re.sub(r"`([^`]+)`", guardar, text)
     text = esc(text)
-    text = re.sub(r"\*\*([^*]+)\*\*", r"<strong>\1</strong>", text)
+    text = re.sub(r"\*\*((?:(?!\*\*).)+)\*\*", r"<strong>\1</strong>", text)
     text = re.sub(r"(?<!\*)\*([^*\n]+)\*(?!\*)", r"<em>\1</em>", text)
     text = re.sub(
         r"\[([^\]]+)\]\(([^)]+)\)",
@@ -165,11 +165,13 @@ def md_to_html(texto, section_prefix=""):
         # Listas ordenadas (1. , 2. )
         if re.match(r"^\d+\. ", s):
             cerrar_parrafo()
+            first_num = int(re.match(r"^(\d+)\. ", s).group(1))
             items = []
             while i < len(lineas) and re.match(r"^\d+\. ", lineas[i].strip()):
                 items.append(re.sub(r"^\d+\. ", "", lineas[i].strip()))
                 i += 1
-            out.append("<ol>" + "".join(f"<li>{inline(x)}</li>" for x in items) + "</ol>")
+            start_attr = f' start="{first_num}"' if first_num > 1 else ""
+            out.append(f"<ol{start_attr}>" + "".join(f"<li>{inline(x)}</li>" for x in items) + "</ol>")
             continue
 
         # Citas / Blockquotes (>)

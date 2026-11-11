@@ -96,19 +96,22 @@
 <h2 id="práctica">Práctica</h2>
 <ol><li>Compilá tu propio <code>.exe</code> (el de los dos hilos sirve) y abrilo con un visor de PE: PE-bear, CFF Explorer o Detect It Easy. Anotá:</li></ol>
 <ul><li><code>Machine</code> y <code>Magic</code> (¿32 o 64 bits?).</li><li><code>ImageBase</code> y <code>AddressOfEntryPoint</code>.</li><li>Secciones con sus RVA, <code>PointerToRawData</code> y permisos.</li><li>Tres imports con nombre y la DLL de la que vienen.</li></ul>
-<ol><li>Calculá el offset del entry point y verificalo en un editor hexadecimal: en ese offset deberían estar los primeros bytes de la función de entrada.</li><li>Cambiá la vista del visor a "RVA" y a "offset" y comprobá que los números cambian. Explicá por qué.</li><li>Escribí un script en Python que lea la cabecera y muestre <code>ImageBase</code>, <code>AddressOfEntryPoint</code> y las secciones. Podés usar <code>struct</code> y <code>os.path.getsize</code>; no necesitás librerías externas.</li></ol>
+<ol start="2"><li>Calculá el offset del entry point y verificalo en un editor hexadecimal: en ese offset deberían estar los primeros bytes de la función de entrada.</li><li>Cambiá la vista del visor a "RVA" y a "offset" y comprobá que los números cambian. Explicá por qué.</li><li>Escribí (o probá) un script en Python que lea la cabecera y muestre <code>ImageBase</code>, <code>AddressOfEntryPoint</code> y las secciones. Podés usar el módulo estándar <code>struct</code>; no necesitás librerías externas (en la lección siguiente, <a href="01-c-python.html">1.5 · C y Python mínimos</a>, explicamos paso a paso cómo funciona <code>struct.unpack_from</code>; acá te dejamos el código listo con comentarios):</li></ol>
 <pre><code class="lenguaje-python">import struct
 
 with open("programa.exe", "rb") as f:
     data = f.read()
 
+# En el offset 0x3C (e_lfanew) hay un entero de 4 bytes little-endian ("&lt;I") que apunta a "PE\0\0"
 pe = struct.unpack_from("&lt;I", data, 0x3C)[0]
 assert data[pe:pe+4] == b"PE\0\0"
+# Leemos Machine y NumberOfSections (dos enteros cortos de 2 bytes cada uno: "&lt;HH")
 machine, nsec = struct.unpack_from("&lt;HH", data, pe+4)
 opt_size = struct.unpack_from("&lt;H", data, pe+20)[0]
 opt = pe + 24
 magic = struct.unpack_from("&lt;H", data, opt)[0]
 entry = struct.unpack_from("&lt;I", data, opt+16)[0]
+# En PE32 (0x10B) ImageBase es de 4 bytes ("&lt;I"); en PE32+ (0x20B, 64 bits) es de 8 bytes ("&lt;Q")
 base = struct.unpack_from("&lt;I", data, opt+28)[0] if magic == 0x10B else struct.unpack_from("&lt;Q", data, opt+24)[0]
 print(f"magic={magic:#x} machine={machine:#x} secciones={nsec}")
 print(f"entry RVA={entry:#x} image base={base:#x}")
@@ -131,7 +134,7 @@ for i in range(nsec):
 <aside class="callout nota"><p class="callout-titulo">Puerta de salida de la Etapa 1</p><p>Si podés hacer el recorrido completo con tu propio <code>.exe</code> y explicar cada paso, terminaste los fundamentos. La Etapa 2 empieza con el lenguaje del procesador: assembly.</p></aside>
 <h2 id="fuentes-de-esta-lección">Fuentes de esta lección</h2>
 <ul><li><a class="fuente" href="../../CLS_resultados_intermedios/transcripciones/extraidos/Reversing%20desde%20cero%20%28Ricardo%20y%20Solid%29/Ricardo%20Narvaja%20y%20Solid%20-%20Reversing%20desde%20cero_05%20Virtual%20Adress%2C%20RVA%2C%20Offsets%20y%20Desplazamientos_05%20Virtual%20Adress%2C%20RVA%2C%20Offsets%20y%20Desplazamientos.txt">Reversing desde cero, cap. 05</a> — VA, RVA, offset, secciones, call directo e indirecto, IAT.</li><li><a class="fuente" href="../../CLS_resultados_intermedios/transcripciones/extraidos/Videos%20y%20material%20adicional%20Ingenieria%20Inversa/Videos_Video33_Video33.txt">Videos y material adicional, Video 33</a> — formato PE, secciones, imports, relocalizaciones.</li><li><a class="fuente" href="../../CLS_resultados_intermedios/transcripciones/extraidos/Reversing%20desde%20cero%20%28Ricardo%20y%20Solid%29/Ricardo%20Narvaja%20y%20Solid%20-%20Reversing%20desde%20cero_14%20Conociendo%20IDA_14%20Conociendo%20IDA.txt">Reversing desde cero, cap. 14</a> — rebase y file offset entre IDA y el debugger.</li><li><a class="fuente" href="../../CLS_resultados_intermedios/transcripciones/extraidos/Reversing%20desde%20cero%20%28Ricardo%20y%20Solid%29/Ricardo%20Narvaja%20y%20Solid%20-%20Reversing%20desde%20cero_26b%20ASLR_26b%20ASLR.txt">Reversing desde cero, cap. 26b</a> — ASLR.</li><li><a class="fuente" href="../../CLS_resultados_intermedios/transcripciones/extraidos/Reversing%20desde%20cero%20%28Ricardo%20y%20Solid%29/Ricardo%20Narvaja%20y%20Solid%20-%20Reversing%20desde%20cero_10%20Unpacking%201%20-%20UPX_10%20Unpacking%201%20-%20UPX%20.txt">Reversing desde cero, cap. 10</a> — UPX como caso de binario empacado.</li></ul>
-<aside class="callout nota"><p class="callout-titulo">Capas de esta lección</p><p><strong>Núcleo conceptual:</strong> el ejemplo <code>0x6D1372 → 0x772</code>, la IAT en <code>0x6E300C</code>, la lectura del PE del video 33 y la explicación de ASLR del capítulo 26b. <strong>Conocimiento externo:</strong> estructura de la cabecera PE y del directorio de imports. <strong>Recomendación editorial:</strong> el script de Python y el límite explícito sobre desempaquetado.</p></aside>
+<aside class="callout nota"><p class="callout-titulo">Síntesis de estudio de esta lección</p><p><strong>Núcleo conceptual:</strong> el ejemplo <code>0x6D1372 → 0x772</code>, la IAT en <code>0x6E300C</code>, la lectura del PE del video 33 y la explicación de ASLR del capítulo 26b. <strong>Conocimiento externo:</strong> estructura de la cabecera PE y del directorio de imports. <strong>Recomendación editorial:</strong> el script de Python y el límite explícito sobre desempaquetado.</p></aside>
 </main>
 <footer class="pie">
   <p>Material educativo y defensivo. Las prácticas se limitan a programas propios, software abierto o crackmes diseñados para aprender. No se enseña a eludir licencias, DRM ni controles de acceso.</p>

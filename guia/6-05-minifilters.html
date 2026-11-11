@@ -108,9 +108,9 @@
 <p>Así como el <strong>Filter Manager</strong> (<code>FltMgr.sys</code>) gobierna la intercepción de archivos en disco, el subsistema de red de Windows implementa <strong>WFP (Windows Filtering Platform)</strong> para mediar, inspeccionar, autorizar y modificar el tráfico de red en modo kernel. WFP es la base técnica de los firewalls de próxima generación, soluciones EDR, proxies locales y sistemas de prevención de intrusiones corporativos.</p>
 <h3 id="arquitectura-interna-de-wfp-vs-minifilters-de-filesystem">Arquitectura Interna de WFP vs. Minifilters de Filesystem</h3>
 <p>A diferencia del modelo de altitudes de filesystem, WFP está integrado directamente en el stack TCP/IP (<code>tcpip.sys</code>) y en el driver del cliente de filtrado (<code>fwpkclnt.sys</code>). Opera mediante una jerarquía de capas (<em>Filtering Layers</em>), filtros, subcapas y módulos de llamada (<em>Callouts</em>):</p>
-<ol><li>**Capas de Filtrado Clave (<em>Layers</em>):**</li></ol>
+<ol><li><strong>Capas de Filtrado Clave (<em>Layers</em>):</strong></li></ol>
 <ul><li><strong><code>FWPM_LAYER_ALE_AUTH_CONNECT_V4</code> / <code>_V6</code>:</strong> <em>Application Layer Enforcement</em> para conexiones salientes. Intercepta la llamada de red en el momento exacto en que un proceso invoca <code>connect()</code>, <strong>antes</strong> de que el paquete TCP SYN salga al cable. Provee el PID del proceso emisor, el path completo del ejecutable y las tuplas IP/puerto de origen y destino.</li><li><strong><code>FWPM_LAYER_ALE_AUTH_RECV_ACCEPT_V4</code> / <code>_V6</code>:</strong> Intercepta intentos de conexión entrante (<code>listen()</code> / <code>accept()</code>), permitiendo bloquear puertos a nivel de proceso.</li><li><strong><code>FWPM_LAYER_INBOUND_TRANSPORT_V4</code> / <code>FWPM_LAYER_OUTBOUND_TRANSPORT_V4</code>:</strong> Intercepción a nivel de paquete de transporte (TCP/UDP) post-reasignación. Provee acceso al descriptor de memoria de red <code>NET_BUFFER_LIST</code> (<code>NBL</code>).</li><li><strong><code>FWPM_LAYER_DATAGRAM_DATA_V4</code> / <code>_V6</code>:</strong> Inspección de payloads UDP crudos.</li></ul>
-<ol><li><strong>Callouts de Kernel (<code>FWPS_CALLOUT</code>):</strong></li></ol>
+<ol start="2"><li><strong>Callouts de Kernel (<code>FWPS_CALLOUT</code>):</strong></li></ol>
 <p>Un controlador de seguridad registra un Callout llamando a <code>FwpsCalloutRegister</code>. La estructura define tres punteros de función fundamentales:</p>
 <ul><li><strong><code>classifyFn</code>:</strong> La función principal invocada por WFP cada vez que un paquete o conexión coincide con las reglas de filtrado.</li><li><strong><code>notifyFn</code>:</strong> Notifica al driver cuando se añaden o eliminan reglas asociadas al Callout.</li><li><strong><code>flowDeleteFn</code>:</strong> Notifica cuando un flujo de red contextual se termina, permitiendo liberar memoria de rastreo.</li></ul>
 <h3 id="anatomía-de-la-función-de-clasificación-classifyfn">Anatomía de la Función de Clasificación (<code>classifyFn</code>)</h3>
@@ -150,7 +150,7 @@
 <ol><li><strong>Inspección Nativa con <code>netsh</code>:</strong></li></ol>
 <pre><code class="lenguaje-cmd">   netsh wfp show state</code></pre>
 <p>Este comando genera un archivo <strong><code>wfpstate.xml</code></strong> en el directorio actual. Al parsearlo, se listan todos los proveedores (<code>providers</code>), filtros activos (<code>filters</code>) con sus condiciones booleanas, y los GUIDs de los callouts enlazados a drivers de terceros.</p>
-<ol><li><strong>Inspección con <code>wfptool</code> y WinDbg:</strong></li></ol>
+<ol start="2"><li><strong>Inspección con <code>wfptool</code> y WinDbg:</strong></li></ol>
 <ul><li>La herramienta de auditoría <code>wfptool.exe</code> permite listar filtros activos filtrando por PID del proceso o por capa (<code>ALE_AUTH_CONNECT_V4</code>).</li><li>En WinDbg kernel mode:</li></ul>
 <pre><code class="lenguaje-text">     !wfp layers
      !wfp callouts</code></pre>
