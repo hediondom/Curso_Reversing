@@ -36,6 +36,16 @@ spec.loader.exec_module(cs)
 try:
     ctx = cs.generar_pdf_completo()
     cs.generar_tomos_y_separata(ctx)
+    # La Parte B debe empezar en página impar (índice par) para poder cortar el
+    # Tomo I en dos partes de paginación par. Si no, se inserta una página de notas.
+    import pypdf as _pypdf
+    _r = _pypdf.PdfReader(os.path.join(BASE, "Tomo_1_Tronco_y_Apoyo.pdf"))
+    _corte = next((i for i, pg in enumerate(_r.pages)
+                   if "PARTE B" in (pg.extract_text() or "") and "Reversing Avanzado" in (pg.extract_text() or "")), None)
+    if _corte is not None and _corte % 2 == 1:
+        print(f"Portadilla de la Parte B en página par ({_corte + 1}): se inserta una página de notas y se recompila.")
+        cs.RELLENO_ANTES_PARTE_B = cs.BLOQUE_NOTAS_PARTE_A
+        cs.generar_tomos_y_separata(ctx)
 finally:
     # Restaurar volúmenes que NO deben cambiar
     for f in ["Tomo_2_Kernel_e_Internals.pdf", "Separata_Escritorio.pdf", "Tomo_3_LLVM_Rust_Contenedores_IA.pdf"]:

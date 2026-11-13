@@ -7,9 +7,9 @@ etapa;leccion;fecha;horas;resultado;dudas;proximo_paso
 1 Fundamentos;guia/01-c-python.html;;;;;
 2 Introducción al reversing;guia/02-registros.html;;;;;
 2 Introducción al reversing;guia/02-instrucciones.html;;;;;
-2 Introducción al reversing;guia/02-flotante.html;;;;;
 2 Introducción al reversing;guia/02-flujo.html;;;;;
 2 Introducción al reversing;guia/02-llamadas.html;;;;;
+2 Introducción al reversing;guia/02-flotante.html;;;;;
 2 Introducción al reversing;guia/02-debugger.html;;;;;
 2 Introducción al reversing;guia/02-ida.html;;;;;
 2 Introducción al reversing;guia/02-optimizaciones.html;;;;;

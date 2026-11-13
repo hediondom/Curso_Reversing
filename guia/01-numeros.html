@@ -32,7 +32,7 @@
 <p>Un <strong>bit</strong> es la unidad mínima: vale 0 o 1. Un <strong>byte</strong> son 8 bits. Un <strong>nibble</strong> son 4 bits, que es exactamente lo que representa un dígito hexadecimal.</p>
 <p>Por eso hexadecimal y binario se llevan tan bien: cada dígito hexadecimal equivale exactamente a cuatro bits.</p>
 
-<h3 id="tabla-maestra-nibble">1. Tabla maestra: hex ↔ binario ↔ decimal (un nibble)</h3>
+<h3 id="tabla-maestra-nibble">La única tabla que conviene saber: un nibble</h3>
 <div class="tabla"><table>
 <thead><tr>
 <th>Hex</th>
@@ -57,135 +57,15 @@
 <tr><td><code>F</code></td><td>1111</td><td>15</td></tr>
 </tbody></table></div>
 
-<h3 id="pesos-de-los-bits">2. Pesos de los bits (dentro de un nibble y un byte)</h3>
-<p><strong>Nibble (4 bits):</strong></p>
-<div class="tabla"><table>
-<thead><tr>
-<th>Bit</th><th>3</th><th>2</th><th>1</th><th>0</th>
-</tr></thead><tbody>
-<tr><td><strong>Peso</strong></td><td>8</td><td>4</td><td>2</td><td>1</td></tr>
-</tbody></table></div>
-
-<p><strong>Byte (8 bits):</strong></p>
-<div class="tabla"><table>
-<thead><tr>
-<th>Bit</th><th>7</th><th>6</th><th>5</th><th>4</th><th>3</th><th>2</th><th>1</th><th>0</th>
-</tr></thead><tbody>
-<tr><td><strong>Peso</strong></td><td>128</td><td>64</td><td>32</td><td>16</td><td>8</td><td>4</td><td>2</td><td>1</td></tr>
-</tbody></table></div>
-
-<h3 id="pesos-posiciones-hex">3. Pesos de las posiciones hex (16<sup>posición</sup>)</h3>
-<div class="tabla"><table>
-<thead><tr>
-<th>Posición (desde la derecha)</th>
-<th>Peso</th>
-<th>Valor Decimal</th>
-</tr></thead><tbody>
-<tr><td>0</td><td>16⁰</td><td>1</td></tr>
-<tr><td>1</td><td>16¹</td><td>16</td></tr>
-<tr><td>2</td><td>16²</td><td>256</td></tr>
-<tr><td>3</td><td>16³</td><td>4.096</td></tr>
-<tr><td>4</td><td>16⁴</td><td>65.536</td></tr>
-<tr><td>5</td><td>16⁵</td><td>1.048.576</td></tr>
-<tr><td>6</td><td>16⁶</td><td>16.777.216</td></tr>
-<tr><td>7</td><td>16⁷</td><td>268.435.456</td></tr>
-</tbody></table></div>
-<p><strong>Regla mnemotécnica:</strong> cada posición hacia la izquierda multiplica su peso por <strong>16</strong>. Cada byte completo (2 caracteres hexadecimales) hacia la izquierda multiplica su peso por <strong>256</strong>.</p>
-
-<h3 id="potencias-de-2">4. Potencias de 2 (para binario → decimal)</h3>
-<div class="tabla"><table>
-<thead><tr>
-<th>2⁰</th><th>2¹</th><th>2²</th><th>2³</th><th>2⁴</th><th>2⁵</th><th>2⁶</th><th>2⁷</th>
-</tr></thead><tbody>
-<tr><td>1</td><td>2</td><td>4</td><td>8</td><td>16</td><td>32</td><td>64</td><td>128</td></tr>
-</tbody></table></div>
-
-<div class="tabla"><table>
-<thead><tr>
-<th>2⁸</th><th>2⁹</th><th>2¹⁰</th><th>2¹¹</th><th>2¹²</th><th>2¹³</th><th>2¹⁴</th><th>2¹⁵</th>
-</tr></thead><tbody>
-<tr><td>256</td><td>512</td><td>1.024</td><td>2.048</td><td>4.096</td><td>8.192</td><td>16.384</td><td>32.768</td></tr>
-</tbody></table></div>
-
-<h3 id="formulas-conversion">5. Fórmulas</h3>
-<div class="tabla"><table>
-<thead><tr>
-<th>Conversión</th>
-<th>Fórmula</th>
-</tr></thead><tbody>
-<tr><td><strong>Hex → Decimal</strong></td><td><code>&Sigma; (d&iacute;gito &times; 16<sup>posici&oacute;n</sup>)</code></td></tr>
-<tr><td><strong>Binario → Decimal</strong></td><td><code>&Sigma; (bit &times; 2<sup>posici&oacute;n</sup>)</code></td></tr>
-<tr><td><strong>Hex → Binario</strong></td><td>Cada dígito hexadecimal se convierte directamente a sus 4 bits (Tabla 1)</td></tr>
-<tr><td><strong>Binario → Hex</strong></td><td>Agrupar de a 4 bits desde la derecha y traducir según Tabla 1</td></tr>
-<tr><td><strong>Decimal → Binario</strong></td><td>Dividir por 2 sucesivamente, restos leídos de abajo hacia arriba</td></tr>
-<tr><td><strong>Decimal → Hex</strong></td><td>Dividir por 16 sucesivamente, restos leídos de abajo hacia arriba</td></tr>
-<tr><td><strong>2 nibbles <code>XY</code></strong></td><td><code>X &times; 16 + Y</code></td></tr>
-<tr><td><strong>2 bytes <code>AB CD</code></strong></td><td><code>0xAB &times; 256 + 0xCD</code></td></tr>
-</tbody></table></div>
-
-<h3 id="tamanos-y-rangos">6. Tamaños y rangos</h3>
-<div class="tabla"><table>
-<thead><tr>
-<th>Nibbles</th>
-<th>Bits</th>
-<th>Bytes</th>
-<th>Rango Hex</th>
-<th>Nombre</th>
-</tr></thead><tbody>
-<tr><td>1</td><td>4</td><td>—</td><td><code>0x0</code> – <code>0xF</code></td><td>Nibble</td></tr>
-<tr><td>2</td><td>8</td><td>1</td><td><code>0x00</code> – <code>0xFF</code></td><td>Byte</td></tr>
-<tr><td>4</td><td>16</td><td>2</td><td><code>0x0000</code> – <code>0xFFFF</code></td><td>Word / short</td></tr>
-<tr><td>8</td><td>32</td><td>4</td><td><code>0x00000000</code> – <code>0xFFFFFFFF</code></td><td>Dword / int</td></tr>
-<tr><td>16</td><td>64</td><td>8</td><td><code>0x0</code> – <code>0xFFFFFFFFFFFFFFFF</code></td><td>Qword / long</td></tr>
-</tbody></table></div>
-
-<h3 id="ejemplos-resueltos-conversion">7. Ejemplos resueltos (para chequear)</h3>
-<div class="tabla"><table>
-<thead><tr>
-<th>Hex</th>
-<th>Binario</th>
-<th>Cálculo</th>
-<th>Decimal</th>
-</tr></thead><tbody>
-<tr><td><code>0x8F</code></td><td><code>1000 1111</code></td><td>8 &times; 16 + 15 = 128 + 15</td><td><strong>143</strong></td></tr>
-<tr><td><code>0xFB</code></td><td><code>1111 1011</code></td><td>15 &times; 16 + 11 = 240 + 11</td><td><strong>251</strong></td></tr>
-<tr><td><code>0x2C7</code></td><td><code>0010 1100 0111</code></td><td>2 &times; 256 + 12 &times; 16 + 7 = 512 + 192 + 7</td><td><strong>711</strong></td></tr>
-<tr><td><code>0x1A3F</code></td><td><code>0001 1010 0011 1111</code></td><td>0x1A &times; 256 + 0x3F = 26 &times; 256 + 63</td><td><strong>6.719</strong></td></tr>
-<tr><td><code>0x10</code></td><td><code>0001 0000</code></td><td>1 &times; 16 + 0</td><td><strong>16</strong></td></tr>
-<tr><td><code>0x0A</code></td><td><code>0000 1010</code></td><td>0 &times; 16 + 10</td><td><strong>10</strong></td></tr>
-</tbody></table></div>
-
-<h3 id="trucos-rapidos-mnemotecnia">8. Trucos rápidos</h3>
-<ul>
-  <li><strong>Letra → Decimal:</strong> <code>A=10, B=11, C=12, D=13, E=14, F=15</code> (A siempre empieza en 10).</li>
-  <li><strong>Letra → Decimal (si te olvidás):</strong> <code>9 + posición en el alfabeto</code> (A es la 1.ª &rarr; 9 + 1 = 10; F es la 6.ª &rarr; 9 + 6 = 15).</li>
-  <li><strong>Hex → Binario:</strong> Nunca dividas; usá directamente la tabla (4 bits por dígito).</li>
-  <li><strong>Decimal → Binario:</strong> Dividí por 2 y leé los restos de abajo hacia arriba.</li>
-  <li><strong>Decimal → Hex:</strong> Dividí por 16 y leé los restos de abajo hacia arriba.</li>
-  <li><strong>Número par / impar en Binario:</strong> Mirá únicamente el <strong>bit 0</strong> (1 = impar, 0 = par).</li>
-  <li><strong><code>0x10</code> no es 10:</strong> Es <strong>16</strong>. El 10 en hexadecimal es <code>0x0A</code>.</li>
-</ul>
-
-<h3 id="tabla-division-por-16">9. Tabla de división por 16 (para decimal → hex)</h3>
-<div class="tabla"><table>
-<thead><tr>
-<th>Decimal</th>
-<th>&divide; 16 (Cociente)</th>
-<th>Resto (Hex)</th>
-<th>Resultado</th>
-</tr></thead><tbody>
-<tr><td>10</td><td>0</td><td>10 &rarr; <code>A</code></td><td><code>0x0A</code></td></tr>
-<tr><td>16</td><td>1</td><td>0</td><td><code>0x10</code></td></tr>
-<tr><td>143</td><td>8</td><td>15 &rarr; <code>F</code></td><td><code>0x8F</code></td></tr>
-<tr><td>251</td><td>15</td><td>11 &rarr; <code>B</code></td><td><code>0xFB</code></td></tr>
-<tr><td>255</td><td>15</td><td>15 &rarr; <code>F</code></td><td><code>0xFF</code></td></tr>
-<tr><td>256</td><td>16</td><td>0 (y 16 &divide; 16 = 1 resto 0)</td><td><code>0x100</code></td></tr>
-</tbody></table></div>
-
+<h3 id="valor-posicional">Valor posicional: por qué funciona</h3>
+<p>No hace falta memorizar tablas grandes. Alcanza con entender una idea que ya usás en decimal: cada posición vale más que la que tiene a su derecha. En decimal, cada lugar vale <strong>10 veces</strong> más: <code>251 = 2×100 + 5×10 + 1×1</code>. En hexadecimal, cada lugar vale <strong>16 veces</strong> más; en binario, <strong>2 veces</strong> más.</p>
+<pre><code class="lenguaje-text">0xFB      = F×16 + B×1          = 15×16 + 11        = 251
+1111 1011 = 128+64+32+16+8+0+2+1                    = 251</code></pre>
+<p>Con la tabla del nibble de arriba y esta idea podés hacer cualquier conversión. Las demás tablas (pesos, potencias de 2, fórmulas, rangos, ejemplos resueltos y trucos) están juntas en el <a href="#anexo-tablas-de-referencia">anexo de tablas de referencia</a>, al final de la lección: son para consultar mientras practicás, no para estudiar de corrido.</p>
 <p>Para leer un byte en hexadecimal en la práctica, separá los dos dígitos y convertí cada uno por separado:</p>
 <pre><code class="lenguaje-text">0x8F  ->  8 = 1000     F = 1111   ->  1000 1111  ->  128 + 8 + 4 + 2 + 1 = 143
 0xFB  ->  F = 1111     B = 1011   ->  1111 1011  ->  128+64+32+16+8+2+1 = 251</code></pre>
-<p>El método mental que usa Solid en el capítulo 01 es asignar a cada bit su potencia de dos, de derecha a izquierda: 1, 2, 4, 8, 16, 32, 64, 128. Para representar 10, prendés 8 y 2:</p>
+<p>Los videos de «Reversing desde cero» —la fuente principal de este curso— tienen dos instructores, <strong>Ricardo</strong> y <strong>Solid</strong>; cuando una lección dice «Ricardo muestra…» o «el capítulo 05…», se refiere a ellos y a esos videos. El método mental que usa Solid en el capítulo 01 es asignar a cada bit su potencia de dos, de derecha a izquierda: 1, 2, 4, 8, 16, 32, 64, 128. Para representar 10, prendés 8 y 2:</p>
 <pre><code class="lenguaje-text">bit:     7   6   5   4   3   2   1   0
 valor: 128  64  32  16   8   4   2   1
 10  ->   0   0   0   0   1   0   1   0     = 0x0A</code></pre>
@@ -224,6 +104,7 @@ contenido:    0D    0C    0B    0A</code></pre>
 <p>Por eso <code>0xFFFFFFFF</code> es 4.294.967.295 sin signo y −1 con signo. Y <code>0x7FFFFFFF</code> es el máximo positivo de 32 bits: 2.147.483.647.</p>
 <p>El capítulo 03 explica esta idea de dividir el rango total en dos mitades: la primera mitad (cuando el bit más alto es <code>0</code>) para el cero y los positivos, y la segunda mitad (cuando el bit más alto es <code>1</code>, es decir, cuando el primer dígito hexadecimal es <code>8, 9, A, B, C, D, E</code> o <code>F</code>) para los negativos (<a class="fuente" href="../../CLS_resultados_intermedios/transcripciones/extraidos/Reversing%20desde%20cero%20%28Ricardo%20y%20Solid%29/Ricardo%20Narvaja%20y%20Solid%20-%20Reversing%20desde%20cero_03%20Registros%2C%20Flags%20y%20N%C3%BAmeros_03%20Registros%2C%20Flags%20y%20N%C3%BAmeros.txt">Reversing desde cero, cap. 03</a>, 00:14:46–00:17:10).</p>
 <aside class="callout aviso"><p class="callout-titulo">El tamaño importa: una suma que "se da vuelta"</p><p>Si un programa acumula valores en un registro de <strong>un byte</strong>, al pasar de <code>0xFF</code> el resultado se envuelve: <code>0xFF + 2 = 0x01</code>, porque solo se guarda la parte baja. Lo mismo vale para <code>WORD</code> o <code>DWORD</code> en su tope. Es un detalle que cambia por completo lo que compara una función. El capítulo 34 lo usa: un programa suma los caracteres que ingresás en un byte, y una suma que pasa de <code>0xFF</code> deja un valor chico (por ejemplo <code>0x149</code> guarda <code>0x49</code>). Cuando leas una comparación, fijate <strong>qué tamaño</strong> tiene el acumulador (<a class="fuente" href="../../CLS_resultados_intermedios/transcripciones/extraidos/Reversing%20desde%20cero%20%28Ricardo%20y%20Solid%29/Ricardo%20Narvaja%20y%20Solid%20-%20Reversing%20desde%20cero_34%20Reverseando%20sin%20s%C3%ADmbolos_34%20Reverseando%20sin%20s%C3%ADmbolos.txt">Reversing desde cero, cap. 34</a>).</p></aside>
+<aside class="callout nota"><p class="callout-titulo">Primera pasada: las dos secciones que siguen son un adelanto</p><p>Los dos ejemplos que vienen (de dirección virtual a offset, y a dónde salta un <code>call</code>) usan palabras que el curso explica más adelante: el formato de los <code>.exe</code> se ve en la lección 1.4 y las instrucciones en la Etapa 2. Están acá porque son <strong>pura aritmética hexadecimal</strong> y sirven para practicarla con casos reales. Seguí las cuentas; si el contexto no te cierra, no te frenes: vas a volver a estos mismos números en 1.4 y en 2.4.</p></aside>
 <h2 id="ejemplo-paso-a-paso-de-una-dirección-virtual-al-offset-del-archivo">Ejemplo paso a paso: de una dirección virtual al offset del archivo</h2>
 <p>Antes de hacer la cuenta, fijemos las tres palabras que vas a ver en todas las herramientas (y que profundizaremos en la lección 1.4 sobre el formato PE):</p>
 <ul><li><strong>Image Base (Base de imagen):</strong> La dirección de memoria RAM donde Windows apoya el comienzo del programa al cargarlo (por ejemplo, <code>0x6D0000</code> o <code>0x400000</code>).</li><li><strong>VA (<em>Virtual Address</em> · Dirección virtual):</strong> La dirección completa de una instrucción o dato en la memoria RAM mientras el programa corre (por ejemplo, <code>0x6D1372</code>). Es lo que muestra el debugger.</li><li><strong>RVA (<em>Relative Virtual Address</em> · Dirección virtual relativa):</strong> La distancia desde el inicio del programa en memoria (<code>RVA = VA − Image Base</code>). No cambia aunque Windows cargue el programa en otra dirección.</li><li><strong>File Offset (Offset en archivo):</strong> La posición exacta de ese mismo byte dentro del archivo <code>.exe</code> guardado en el disco rígido (lo que muestra el editor hexadecimal). Es más chico que la RVA porque en el disco las secciones están guardadas de forma más compacta que en la memoria RAM.</li></ul>
@@ -234,7 +115,7 @@ contenido:    0D    0C    0B    0A</code></pre>
 <pre><code class="lenguaje-text">RVA = VA - Image Base
     = 0x6D1372 - 0x6D0000
     = 0x1372</code></pre>
-<p><strong>Paso 2.</strong> Restá el espacio que el header ocupa en memoria (<code>0x1000</code>) y sumá el offset real donde empieza <code>.text</code> en el archivo (<code>0x400</code>):</p>
+<p><strong>Paso 2.</strong> Restá la RVA donde empieza la sección <code>.text</code> en memoria (<code>0x1000</code>, justo después del header) y sumá el offset donde empieza <code>.text</code> en el archivo (<code>0x400</code>):</p>
 <pre><code class="lenguaje-text">File Offset = RVA - 0x1000 + 0x400
             = 0x1372 - 0x1000 + 0x400
             = 0x372 + 0x400
@@ -258,15 +139,142 @@ contenido:    0D    0C    0B    0A</code></pre>
 <p><strong>1. ¿Cuántos bits hay en un byte y cuántos dígitos hexadecimales lo representan?</strong> Ocho bits y dos dígitos hexadecimales, porque cada dígito representa cuatro bits.</p>
 <p><strong>2. ¿Por qué <code>0xFB</code> puede ser 251 o −5?</strong> Porque el patrón de bits es el mismo. El tipo del dato y la instrucción que lo usa deciden si se interpreta con signo o sin signo.</p>
 <p><strong>3. ¿Qué significa little-endian?</strong> Que el byte menos significativo se almacena en la dirección más baja. Para leer un valor de memoria hay que invertir el orden de los bytes.</p>
-<p><strong>4. ¿La dirección que muestra el debugger es la misma que la del archivo en disco?</strong> No. La del debugger es una dirección virtual; la del archivo es un offset. Se relacionan con la fórmula <code>offset = RVA − alineación_del_header + PointerToRawData</code>.</p>
+<p><strong>4. ¿La dirección que muestra el debugger es la misma que la del archivo en disco?</strong> No. La del debugger es una dirección virtual; la del archivo es un offset. Se relacionan con la fórmula <code>offset = RVA − RVA_de_inicio_de_la_sección + PointerToRawData_de_la_sección</code> (en el ejemplo, <code>0x1372 − 0x1000 + 0x400</code>).</p>
 <p><strong>5. ¿Por qué el destino de un <code>call</code> se calcula desde la instrucción siguiente?</strong> Porque el desplazamiento se mide desde el final de la instrucción actual, que es donde el procesador ya actualizó <code>EIP</code>/<code>RIP</code>. Sumar el tamaño de la instrucción es parte del cálculo.</p>
 <h2 id="antes-de-avanzar">Antes de avanzar</h2>
 <p>Tenés que poder, sin mirar la tabla:</p>
 <ul><li>Pasar un byte de hexadecimal a binario y a decimal.</li><li>Explicar complemento a dos con el ejemplo de <code>0xFB</code>.</li><li>Escribir <code>0x0A0B0C0D</code> como bytes en memoria.</li><li>Calcular un file offset a partir de una VA y un <code>call</code> directo a partir de su desplazamiento.</li></ul>
-<aside class="callout nota"><p class="callout-titulo">Puerta de salida de la Etapa 1 · bloque 1</p><p>Si los ejercicios 3 a 6 te salen con seguridad, seguí con memoria y procesos. Si no, repetilos con lápiz y papel antes de abrir un debugger: la pantalla no perdona la aritmética floja.</p></aside>
+<aside class="callout nota"><p class="callout-titulo">Puerta de salida</p><p>Si los ejercicios 3 a 6 te salen con seguridad, seguí con memoria y procesos. Si no, repetilos con lápiz y papel antes de abrir un debugger: la pantalla no perdona la aritmética floja.</p></aside>
+<h2 id="anexo-tablas-de-referencia">Anexo: tablas de referencia</h2>
+<p>Material de consulta. Volvé acá cuando una conversión no te salga; no hace falta leerlo de corrido.</p>
+<h3 id="pesos-de-los-bits">Pesos de los bits (dentro de un nibble y un byte)</h3>
+<p><strong>Nibble (4 bits):</strong></p>
+<div class="tabla"><table>
+<thead><tr>
+<th>Bit</th><th>3</th><th>2</th><th>1</th><th>0</th>
+</tr></thead><tbody>
+<tr><td><strong>Peso</strong></td><td>8</td><td>4</td><td>2</td><td>1</td></tr>
+</tbody></table></div>
+
+<p><strong>Byte (8 bits):</strong></p>
+<div class="tabla"><table>
+<thead><tr>
+<th>Bit</th><th>7</th><th>6</th><th>5</th><th>4</th><th>3</th><th>2</th><th>1</th><th>0</th>
+</tr></thead><tbody>
+<tr><td><strong>Peso</strong></td><td>128</td><td>64</td><td>32</td><td>16</td><td>8</td><td>4</td><td>2</td><td>1</td></tr>
+</tbody></table></div>
+
+<h3 id="pesos-posiciones-hex">Pesos de las posiciones hex (16<sup>posición</sup>)</h3>
+<div class="tabla"><table>
+<thead><tr>
+<th>Posición (desde la derecha)</th>
+<th>Peso</th>
+<th>Valor Decimal</th>
+</tr></thead><tbody>
+<tr><td>0</td><td>16⁰</td><td>1</td></tr>
+<tr><td>1</td><td>16¹</td><td>16</td></tr>
+<tr><td>2</td><td>16²</td><td>256</td></tr>
+<tr><td>3</td><td>16³</td><td>4.096</td></tr>
+<tr><td>4</td><td>16⁴</td><td>65.536</td></tr>
+<tr><td>5</td><td>16⁵</td><td>1.048.576</td></tr>
+<tr><td>6</td><td>16⁶</td><td>16.777.216</td></tr>
+<tr><td>7</td><td>16⁷</td><td>268.435.456</td></tr>
+</tbody></table></div>
+<p><strong>Regla mnemotécnica:</strong> cada posición hacia la izquierda multiplica su peso por <strong>16</strong>. Cada byte completo (2 caracteres hexadecimales) hacia la izquierda multiplica su peso por <strong>256</strong>.</p>
+
+<h3 id="potencias-de-2">Potencias de 2 (para binario → decimal)</h3>
+<div class="tabla"><table>
+<thead><tr>
+<th>2⁰</th><th>2¹</th><th>2²</th><th>2³</th><th>2⁴</th><th>2⁵</th><th>2⁶</th><th>2⁷</th>
+</tr></thead><tbody>
+<tr><td>1</td><td>2</td><td>4</td><td>8</td><td>16</td><td>32</td><td>64</td><td>128</td></tr>
+</tbody></table></div>
+
+<div class="tabla"><table>
+<thead><tr>
+<th>2⁸</th><th>2⁹</th><th>2¹⁰</th><th>2¹¹</th><th>2¹²</th><th>2¹³</th><th>2¹⁴</th><th>2¹⁵</th>
+</tr></thead><tbody>
+<tr><td>256</td><td>512</td><td>1.024</td><td>2.048</td><td>4.096</td><td>8.192</td><td>16.384</td><td>32.768</td></tr>
+</tbody></table></div>
+
+<h3 id="formulas-conversion">Fórmulas</h3>
+<div class="tabla"><table>
+<thead><tr>
+<th>Conversión</th>
+<th>Fórmula</th>
+</tr></thead><tbody>
+<tr><td><strong>Hex → Decimal</strong></td><td><code>&Sigma; (d&iacute;gito &times; 16<sup>posici&oacute;n</sup>)</code></td></tr>
+<tr><td><strong>Binario → Decimal</strong></td><td><code>&Sigma; (bit &times; 2<sup>posici&oacute;n</sup>)</code></td></tr>
+<tr><td><strong>Hex → Binario</strong></td><td>Cada dígito hexadecimal se convierte directamente a sus 4 bits (tabla del nibble)</td></tr>
+<tr><td><strong>Binario → Hex</strong></td><td>Agrupar de a 4 bits desde la derecha y traducir según la tabla del nibble</td></tr>
+<tr><td><strong>Decimal → Binario</strong></td><td>Dividir por 2 sucesivamente, restos leídos de abajo hacia arriba</td></tr>
+<tr><td><strong>Decimal → Hex</strong></td><td>Dividir por 16 sucesivamente, restos leídos de abajo hacia arriba</td></tr>
+<tr><td><strong>2 nibbles <code>XY</code></strong></td><td><code>X &times; 16 + Y</code></td></tr>
+<tr><td><strong>2 bytes <code>AB CD</code></strong></td><td><code>0xAB &times; 256 + 0xCD</code></td></tr>
+</tbody></table></div>
+
+<h3 id="tamanos-y-rangos">Tamaños y rangos</h3>
+<div class="tabla"><table>
+<thead><tr>
+<th>Nibbles</th>
+<th>Bits</th>
+<th>Bytes</th>
+<th>Rango Hex</th>
+<th>Nombre</th>
+</tr></thead><tbody>
+<tr><td>1</td><td>4</td><td>—</td><td><code>0x0</code> – <code>0xF</code></td><td>Nibble</td></tr>
+<tr><td>2</td><td>8</td><td>1</td><td><code>0x00</code> – <code>0xFF</code></td><td>Byte</td></tr>
+<tr><td>4</td><td>16</td><td>2</td><td><code>0x0000</code> – <code>0xFFFF</code></td><td>Word / short</td></tr>
+<tr><td>8</td><td>32</td><td>4</td><td><code>0x00000000</code> – <code>0xFFFFFFFF</code></td><td>Dword / <code>int</code></td></tr>
+<tr><td>16</td><td>64</td><td>8</td><td><code>0x0</code> – <code>0xFFFFFFFFFFFFFFFF</code></td><td>Qword / <code>long long</code> (en Windows, <code>long</code> mide 4 bytes)</td></tr>
+</tbody></table></div>
+
+<h3 id="ejemplos-resueltos-conversion">Ejemplos resueltos (para chequear)</h3>
+<div class="tabla"><table>
+<thead><tr>
+<th>Hex</th>
+<th>Binario</th>
+<th>Cálculo</th>
+<th>Decimal</th>
+</tr></thead><tbody>
+<tr><td><code>0x8F</code></td><td><code>1000 1111</code></td><td>8 &times; 16 + 15 = 128 + 15</td><td><strong>143</strong></td></tr>
+<tr><td><code>0xFB</code></td><td><code>1111 1011</code></td><td>15 &times; 16 + 11 = 240 + 11</td><td><strong>251</strong></td></tr>
+<tr><td><code>0x2C7</code></td><td><code>0010 1100 0111</code></td><td>2 &times; 256 + 12 &times; 16 + 7 = 512 + 192 + 7</td><td><strong>711</strong></td></tr>
+<tr><td><code>0x1A3F</code></td><td><code>0001 1010 0011 1111</code></td><td>0x1A &times; 256 + 0x3F = 26 &times; 256 + 63</td><td><strong>6.719</strong></td></tr>
+<tr><td><code>0x10</code></td><td><code>0001 0000</code></td><td>1 &times; 16 + 0</td><td><strong>16</strong></td></tr>
+<tr><td><code>0x0A</code></td><td><code>0000 1010</code></td><td>0 &times; 16 + 10</td><td><strong>10</strong></td></tr>
+</tbody></table></div>
+
+<h3 id="trucos-rapidos-mnemotecnia">Trucos rápidos</h3>
+<ul>
+  <li><strong>Letra → Decimal:</strong> <code>A=10, B=11, C=12, D=13, E=14, F=15</code> (A siempre empieza en 10).</li>
+  <li><strong>Letra → Decimal (si te olvidás):</strong> <code>9 + posición en el alfabeto</code> (A es la 1.ª &rarr; 9 + 1 = 10; F es la 6.ª &rarr; 9 + 6 = 15).</li>
+  <li><strong>Hex → Binario:</strong> Nunca dividas; usá directamente la tabla (4 bits por dígito).</li>
+  <li><strong>Decimal → Binario:</strong> Dividí por 2 y leé los restos de abajo hacia arriba.</li>
+  <li><strong>Decimal → Hex:</strong> Dividí por 16 y leé los restos de abajo hacia arriba.</li>
+  <li><strong>Número par / impar en Binario:</strong> Mirá únicamente el <strong>bit 0</strong> (1 = impar, 0 = par).</li>
+  <li><strong><code>0x10</code> no es 10:</strong> Es <strong>16</strong>. El 10 en hexadecimal es <code>0x0A</code>.</li>
+</ul>
+
+<h3 id="tabla-division-por-16">Tabla de división por 16 (para decimal → hex)</h3>
+<div class="tabla"><table>
+<thead><tr>
+<th>Decimal</th>
+<th>&divide; 16 (Cociente)</th>
+<th>Resto (Hex)</th>
+<th>Resultado</th>
+</tr></thead><tbody>
+<tr><td>10</td><td>0</td><td>10 &rarr; <code>A</code></td><td><code>0x0A</code></td></tr>
+<tr><td>16</td><td>1</td><td>0</td><td><code>0x10</code></td></tr>
+<tr><td>143</td><td>8</td><td>15 &rarr; <code>F</code></td><td><code>0x8F</code></td></tr>
+<tr><td>251</td><td>15</td><td>11 &rarr; <code>B</code></td><td><code>0xFB</code></td></tr>
+<tr><td>255</td><td>15</td><td>15 &rarr; <code>F</code></td><td><code>0xFF</code></td></tr>
+<tr><td>256</td><td>16</td><td>0 (y 16 &divide; 16 = 1 resto 0)</td><td><code>0x100</code></td></tr>
+</tbody></table></div>
+
 <h2 id="fuentes-de-esta-lección">Fuentes de esta lección</h2>
 <ul><li><a class="fuente" href="../../CLS_resultados_intermedios/transcripciones/extraidos/Reversing%20desde%20cero%20%28Ricardo%20y%20Solid%29/Ricardo%20Narvaja%20y%20Solid%20-%20Reversing%20desde%20cero_01%20x64dbg%20primeros%20pasos_01%20x64dbg%20primeros%20pasos.txt">Reversing desde cero, cap. 01</a> — bits, bytes, little-endian, tamaños (00:18:00–00:24:00).</li><li><a class="fuente" href="../../CLS_resultados_intermedios/transcripciones/extraidos/Reversing%20desde%20cero%20%28Ricardo%20y%20Solid%29/Ricardo%20Narvaja%20y%20Solid%20-%20Reversing%20desde%20cero_02%20Instrucciones%201_02%20Instrucciones%201.txt">Reversing desde cero, cap. 02</a> — lectura de un valor desde memoria (00:07:00–00:08:00).</li><li><a class="fuente" href="../../CLS_resultados_intermedios/transcripciones/extraidos/Reversing%20desde%20cero%20%28Ricardo%20y%20Solid%29/Ricardo%20Narvaja%20y%20Solid%20-%20Reversing%20desde%20cero_03%20Registros%2C%20Flags%20y%20N%C3%BAmeros_03%20Registros%2C%20Flags%20y%20N%C3%BAmeros.txt">Reversing desde cero, cap. 03</a> — números con signo (00:14:46–00:17:10).</li><li><a class="fuente" href="../../CLS_resultados_intermedios/transcripciones/extraidos/Reversing%20desde%20cero%20%28Ricardo%20y%20Solid%29/Ricardo%20Narvaja%20y%20Solid%20-%20Reversing%20desde%20cero_05%20Virtual%20Adress%2C%20RVA%2C%20Offsets%20y%20Desplazamientos_05%20Virtual%20Adress%2C%20RVA%2C%20Offsets%20y%20Desplazamientos.txt">Reversing desde cero, cap. 05</a> — VA, RVA, file offset y desplazamientos (00:00:40–00:12:00).</li><li><a href="../ida_tutes/2.html">Curso IDA · tute 2, Sistemas de numeración</a> — binario/decimal/hexadecimal y la barra de Python de IDA para convertir bases.</li></ul>
-<aside class="callout nota"><p class="callout-titulo">Síntesis de estudio de esta lección</p><p><strong>Núcleo conceptual:</strong> el ejemplo numérico de la VA <code>0x6D1372</code>, la fórmula del offset y el cálculo del <code>call</code> a <code>0x6D173B</code>. <strong>Conocimiento externo:</strong> complemento a dos, rangos y aritmética hexadecimal. <strong>Recomendación editorial:</strong> el orden de los ejercicios y la advertencia sobre las imprecisiones del audio.</p></aside>
+<aside class="callout nota"><p class="callout-titulo">De dónde sale cada parte de esta lección</p><p><strong>Núcleo conceptual:</strong> el ejemplo numérico de la VA <code>0x6D1372</code>, la fórmula del offset y el cálculo del <code>call</code> a <code>0x6D173B</code>. <strong>Conocimiento externo:</strong> complemento a dos, rangos y aritmética hexadecimal. <strong>Recomendación editorial:</strong> el orden de los ejercicios y la advertencia sobre las imprecisiones del audio.</p></aside>
 </main>
 <footer class="pie">
   <p>Material educativo y defensivo. Las prácticas se limitan a programas propios, software abierto o crackmes diseñados para aprender. No se enseña a eludir licencias, DRM ni controles de acceso.</p>

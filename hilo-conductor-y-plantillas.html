@@ -31,7 +31,7 @@
 
 <h3 id="estadio-1-nivel-principiante-check-v1-c-con-o0-frente-a-o2">Estadio 1 · Nivel Principiante: <code>check_v1.c</code> con <code>-O0</code> frente a <code>-O2</code> (Etapas 1, 2A y 4.1)</h3>
 <p>En el nivel Principiante escribimos la función en C puro y comparamos qué genera el compilador en x64 sin optimizaciones (<code>-O0</code> / <code>/Od</code>) frente a compilación optimizada (<code>-O2</code>):</p>
-<pre><code class="lenguaje-c">// Regla base en C (Lecciones 1.5, 2.4, 2.8 y 4.1)
+<pre><code class="lenguaje-c">// Regla base en C (Lecciones 1.5, 2.3, 2.8 y 4.1)
 int validar_pares(int a, int b) {
     if (a &gt; 50 || b &lt; 50) return 0;
     return ((a + b) * 4) == 480;
@@ -46,7 +46,7 @@ validar_pares:                                validar_pares:
   cmp   dword ptr [rsp+10h], 32h ; ¿b &lt; 50?     jl    short salir       ; si b &lt; 50, retorna 0
   jl    short fallo                             lea    ecx, [rcx+rdx]    ; ecx = a + b (con LEA, 2.2)
   mov   eax, dword ptr [rsp+8]                  cmp   ecx, 78h          ; ¡480 / 4 = 120 (0x78)!
-  add   eax, dword ptr [rsp+10h] ; eax = a+b    sete  al                ; AL = 1 si (a+b)==120 (2.4)
+  add   eax, dword ptr [rsp+10h] ; eax = a+b    sete  al                ; AL = 1 si (a+b)==120 (2.3)
   shl   eax, 2                   ; eax *= 4   salir:
   cmp   eax, 1E0h                ; ¿== 480?     ret
   jne   short fallo
@@ -57,7 +57,7 @@ fallo:
   ret</code></pre>
 <p><strong>Qué aprende el alumno al comparar ambos listados:</strong></p>
 <ul>
-<li>Con <code>-O0</code> (izquierda) cada variable baja al <em>shadow space</em> (<code>[rsp+8]</code>, <code>[rsp+10h]</code>, <a href="guia/01-memoria.html">1.2</a> y <a href="guia/02-llamadas.html">2.5</a>) y la multiplicación por 4 se ve como <code>shl eax, 2</code> seguida de <code>cmp eax, 1E0h</code>.</li>
+<li>Con <code>-O0</code> (izquierda) cada variable baja al <em>shadow space</em> (<code>[rsp+8]</code>, <code>[rsp+10h]</code>, <a href="guia/01-memoria.html">1.2</a> y <a href="guia/02-llamadas.html">2.4</a>) y la multiplicación por 4 se ve como <code>shl eax, 2</code> seguida de <code>cmp eax, 1E0h</code>.</li>
 <li>Con <code>-O2</code> (derecha) el compilador aplica reducción algebraica (<a href="guia/02-optimizaciones.html">2.8</a>): en lugar de multiplicar <code>(a + b) * 4</code> y comparar contra <code>480</code>, suma con <code>lea ecx, [rcx+rdx]</code> y compara directamente contra <code>120</code> (<code>0x78 = 480 / 4</code>), usando <code>sete al</code> en vez de un salto condicional. Si en <code>main</code> se elige entre <code>"Correcto"</code> e <code>"Incorrecto"</code>, <code>-O2</code> carga ambas direcciones con <code>lea</code> y selecciona una con <code>cmovne</code> (<a href="guia/04-metodo.html">4.1</a>).</li>
 </ul>
 
@@ -103,7 +103,7 @@ fallo:
 <h2 id="parte-ii-kit-de-5-plantillas-de-código-mínimo-boilerplates-listos-para-compilar">Parte II · Kit Completo de 15 Plantillas y Laboratorios Prácticos (Troncal y Avanzado)</h2>
 <p>Todas las prácticas del curso están pensadas para ejecutarse sobre <strong>programas propios en tu VM aislada</strong> (Etapa 0). Para que no tengas que escribir desde cero cada escenario técnico, acá tenés siete esqueletos autocontenidos de ~35 líneas en C y C++ estándar (también guardados como archivos sueltos en la carpeta <code>plantillas_codigo/</code> del paquete HTML). Compilalos en la VM con <strong>Visual Studio Developer Command Prompt (<code>cl.exe</code>)</strong> o con <strong>MinGW-w64 (<code>gcc</code> / <code>g++</code>)</strong>.</p>
 
-<h3 id="plantilla-1-check-evolucion-c-práctica-para-1-5-2-4-2-8-2-10-2-11-2-15-2-17-y-4-1">Plantilla 1 · <code>check_evolucion.c</code> (Práctica para 1.5, 2.4, 2.8, 2.10, 2.11, 2.15, 2.17 y 4.1)</h3>
+<h3 id="plantilla-1-check-evolucion-c-práctica-para-1-5-2-4-2-8-2-10-2-11-2-15-2-17-y-4-1">Plantilla 1 · <code>check_evolucion.c</code> (Práctica para 1.5, 2.3, 2.8, 2.10, 2.11, 2.15, 2.17 y 4.1)</h3>
 <p>Un único archivo en C que podés compilar en modo Principiante (por defecto) o en modo Intermedio (pasando <code>/DMODO_INTERMEDIO</code> o <code>-DMODO_INTERMEDIO</code>), lo que activa un <strong>TLS Callback</strong> que comprueba <code>IsDebuggerPresent()</code> y una rutina de descifrado <strong>XOR</strong> sobre el mensaje de éxito:</p>
 <pre><code class="lenguaje-c">// Archivo: plantillas_codigo/check_evolucion.c
 // Compilar Principiante (MSVC): cl /Zi /Od check_evolucion.c /Fe:check_v1_O0.exe

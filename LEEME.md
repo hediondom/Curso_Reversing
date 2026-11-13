@@ -8,7 +8,7 @@ Guía profesional y exhaustiva de ingeniería inversa, reversing de binarios, se
 
 La obra se organiza en **tres tomos complementarios**, una **separata de referencia rápida** para el escritorio y un **volumen maestro digital consolidado**:
 
-1. **Tomo I · Tronco y Apoyo (Fundamentos a Especialización — 416 págs.):**
+1. **Tomo I · Tronco y Apoyo (Fundamentos a Especialización — 422 págs.):**
    - **Etapa 0:** Entorno de laboratorio aislado, herramientas y metodología segura.
    - **Etapa 1:** Fundamentos de bajo nivel, representación numérica, memoria, stack, ciclo de vida de procesos y formato PE.
    - **Etapa 2:** Dominio del desensamblado y depuración (IDA Pro, Ghidra, x64dbg, WinDbg), flujo de control, llamadas, optimizaciones del compilador, TLS callbacks, MFC, packers didácticos y taxonomía anti-análisis.
@@ -49,18 +49,18 @@ Para evitar sobrecargar los lomos y asegurar un paso de hoja completamente fluid
 
 | Volumen | Archivo PDF en el Repositorio / Pendrive | Páginas | Hojas (Doble Faz) | Encuadernación Recomendada |
 | :--- | :--- | :---: | :---: | :--- |
-| **1. Tomo I — Parte A** | `Tomo_1_Parte_A_pags_1-178.pdf` | **178 págs.** | **89 hojas** | Anillado metálico Ring Wire con tapa dura/polipropileno |
-| **2. Tomo I — Parte B** | `Tomo_1_Parte_B_pags_179-410.pdf` | **232 págs.** | **116 hojas** | Anillado metálico Ring Wire con tapa dura/polipropileno |
+| **1. Tomo I — Parte A** | `Tomo_1_Parte_A_pags_1-188.pdf` | **188 págs.** | **94 hojas** | Anillado metálico Ring Wire con tapa dura/polipropileno |
+| **2. Tomo I — Parte B** | `Tomo_1_Parte_B_pags_189-422.pdf` | **234 págs.** | **117 hojas** | Anillado metálico Ring Wire con tapa dura/polipropileno |
 | **3. Tomo II** | `Tomo_2_Kernel_e_Internals.pdf` | **198 págs.** | **99 hojas** | Anillado metálico Ring Wire con tapa dura/polipropileno |
 | **4. Tomo III** | `Tomo_3_LLVM_Rust_Contenedores_IA.pdf` | **52 págs.** | **26 hojas** | Anillado metálico Ring Wire con tapa dura/polipropileno |
 | **5. Separata de Escritorio** | `Separata_Escritorio.pdf` | **18 págs.** | **9 hojas** | Anillado fino o cuadernillo abrochado a caballete |
-| **TOTAL FÍSICO** | **5 volúmenes encuadernados** | **684 págs.** | **342 hojas** | **100 % Paridad Par (Doble Faz)** |
+| **TOTAL FÍSICO** | **5 volúmenes encuadernados** | **690 págs.** | **345 hojas** | **100 % Paridad Par (Doble Faz)** |
 
 ### 📑 Volumen Maestro Digital Unificado (Lectura en Pantalla / Tablet)
 
 | Archivo PDF | Páginas | Hojas equiv. | Propósito |
 | :--- | :---: | :---: | :--- |
-| **`CLS_Curso_Reversing.pdf`** | **660 págs.** | **330 hojas** | **Trilogía Maestra Consolidada:** Unifica los tres tomos en un solo archivo con navegación jerárquica por marcadores (*bookmarks*). Ideal para lectura en tablet, búsqueda global de texto y archivo bibliotecario. **(No requiere impresión física si se imprimen los 5 tomos desglosados)**. |
+| **`CLS_Curso_Reversing.pdf`** | **672 págs.** | **336 hojas** | **Trilogía Maestra Consolidada:** Unifica los tres tomos en un solo archivo con navegación jerárquica por marcadores (*bookmarks*). Ideal para lectura en tablet, búsqueda global de texto y archivo bibliotecario. **(No requiere impresión física si se imprimen los 5 tomos desglosados)**. |
 | **`Tomo_1_Tronco_y_Apoyo.pdf`** | **410 págs.** | **205 hojas** | Tomo I completo continuo de consulta técnica. |
 
 ### 📄 Parámetros Técnicos para el Taller de Imprenta
@@ -99,7 +99,7 @@ El proyecto cuenta con scripts en Python para la regeneración y verificación d
 
 - `construir_tomo2.py`: Compila y pagina el Tomo II (198 págs.) a partir de sus fuentes HTML con tipografía canónica y alto contraste.
 - `construir_tomo3.py`: Compila y valida el Tomo III (52 págs.) a partir de sus especificaciones técnicas y módulos Markdown.
-- `generar_cls_curso_reversing.py`: Genera el archivo maestro unificado `CLS_Curso_Reversing.pdf` (660 págs.) concatenando los tomos con árboles de marcadores sincronizados.
+- `generar_cls_curso_reversing.py`: Genera el archivo maestro unificado `CLS_Curso_Reversing.pdf` (672 págs.) concatenando los tomos con árboles de marcadores sincronizados.
 - `generar_orden_impresion.py`: Renderiza `orden_impresion.html` a PDF y PNG mediante Chrome Headless.
 - `sincronizar_y_limpiar.py`: Distribuye los binarios finales hacia el pendrive (`E:\`), el espejo local (`D:\Guia\CLS_Guia_Gemini`) y el directorio de artefactos, depurando copias obsoletas.
 
@@ -110,6 +110,6 @@ El proyecto cuenta con scripts en Python para la regeneración y verificación d
 - **Edición:** Trilogía Completa (Tomos I, II y III)
 - **Revisión:** 5.5 (Estándar Industrial y Editorial Consolidado)
 - **Fecha:** Noviembre de 2026
-- **Total Físico de Imprenta:** 684 páginas (342 hojas doble faz en 5 volúmenes)
-- **Total Digital Maestro:** 666 páginas (333 hojas unificadas)
+- **Total Físico de Imprenta:** 690 páginas (345 hojas doble faz en 5 volúmenes)
+- **Total Digital Maestro:** 672 páginas (336 hojas unificadas)
 - **Estado de Auditoría:** 100 % aprobado (0 destinos rotos, 0 errores de maquetación, paridad par garantizada, alto contraste verificado).

@@ -135,14 +135,14 @@ html_content = """<!DOCTYPE html>
   <tbody>
     <tr>
       <td class="col-vol">1. Tomo I — Parte A</td>
-      <td class="col-arch">Tomo_1_Parte_A_pags_1-182.pdf</td>
-      <td class="col-pags">182 págs.</td>
-      <td class="col-hojas">91 hojas</td>
+      <td class="col-arch">Tomo_1_Parte_A_pags_1-188.pdf</td>
+      <td class="col-pags">188 págs.</td>
+      <td class="col-hojas">94 hojas</td>
       <td class="col-enc">Anillado metálico Ring Wire / espiral o binder con tapa dura/polipropileno</td>
     </tr>
     <tr>
       <td class="col-vol">2. Tomo I — Parte B</td>
-      <td class="col-arch">Tomo_1_Parte_B_pags_183-416.pdf</td>
+      <td class="col-arch">Tomo_1_Parte_B_pags_189-422.pdf</td>
       <td class="col-pags">234 págs.</td>
       <td class="col-hojas">117 hojas</td>
       <td class="col-enc">Anillado metálico Ring Wire / espiral o binder con tapa dura/polipropileno</td>
@@ -171,15 +171,15 @@ html_content = """<!DOCTYPE html>
     <tr class="total-row">
       <td class="col-vol">TOTAL FÍSICO A IMPRIMIR</td>
       <td class="col-arch">5 volúmenes encuadernados</td>
-      <td class="col-pags">684 págs.</td>
-      <td class="col-hojas">342 hojas</td>
+      <td class="col-pags">690 págs.</td>
+      <td class="col-hojas">345 hojas</td>
       <td class="col-enc">100 % Paridad Par (sin hojas impares ni blancas sueltas)</td>
     </tr>
   </tbody>
 </table>
 
 <div class="nota-maestro">
-  <strong>* Archivo maestro digital de consulta (Trilogía Completa Unificada):</strong> <span class="nombre-maestro">CLS_Curso_Reversing.pdf</span> (666 págs. · 333 hojas).<br>
+  <strong>* Archivo maestro digital de consulta (Trilogía Completa Unificada):</strong> <span class="nombre-maestro">CLS_Curso_Reversing.pdf</span> (672 págs. · 336 hojas).<br>
   Contiene los Tomos I, II y III consolidados en un solo archivo con marcadores de navegación completa. <strong>NO se manda a imprimir físicamente</strong> (para lectura digital en pantalla o archivo). Los archivos para impresión son exclusivamente los 5 listados arriba.
 </div>
 

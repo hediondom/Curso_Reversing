@@ -58,10 +58,23 @@
 <p>En la configuración de la VM, revisá la pestaña <strong>Red</strong>:</p>
 <ul><li>Adaptador 1: <strong>NAT</strong> o <strong>Host-only</strong>. NAT permite salir a internet aislando tu red; Host-only solo permite comunicación directa con el host.</li><li>Desactivá el adaptador puente (<em>Bridged</em>): ese conecta la VM directamente como un equipo más dentro de tu red local (LAN).</li><li>En <strong>General &gt; Avanzado</strong>, desactivá el portapapeles compartido y el arrastrar y soltar.</li><li>En <strong>Carpetas compartidas</strong>, no agregues ninguna.</li></ul>
 <p><strong>Por qué:</strong> el adaptador puente es el que convierte una VM en otro dispositivo de tu red. Para analizar un crackme no lo necesitás.</p>
-<h3 id="paso-3-tomar-la-snapshot-limpia">Paso 3. Tomar la snapshot "limpia"</h3>
+<h3 id="paso-3-instalar-el-taller-mínimo">Paso 3. Instalar el taller mínimo (antes de la snapshot)</h3>
+<p>Las prácticas de las Etapas 1 y 2 te van a pedir compilar programas chicos y abrirlos en un debugger. Instalá ahora lo necesario, así la snapshot limpia ya lo incluye. Descargá cada cosa <strong>desde su sitio oficial</strong>, con la VM en NAT, y anotá versión y SHA-256 del instalador en la bitácora.</p>
+<div class="tabla"><table>
+<thead><tr><th>Para qué</th><th>Qué instalar</th><th>Nota</th></tr></thead>
+<tbody>
+<tr><td>Depurar</td><td>x64dbg</td><td>Trae dos ejecutables: <code>x32dbg</code> para programas de 32 bits y <code>x64dbg</code> para los de 64.</td></tr>
+<tr><td>Ver bytes</td><td>Un editor hexadecimal (por ejemplo HxD)</td><td>Muestra el archivo tal cual está en disco.</td></tr>
+<tr><td>Ver la cabecera del <code>.exe</code></td><td>PE-bear o Detect It Easy</td><td>Lo usás desde la lección 1.4.</td></tr>
+<tr><td>Escribir herramientas</td><td>Python 3</td><td>Lo usás desde la lección 1.4.</td></tr>
+<tr><td>Compilar tus programas en C</td><td>Visual Studio Community <em>o</em> MinGW-w64 (GCC)</td><td>Con uno alcanza; mirá el recuadro de abajo.</td></tr>
+</tbody></table></div>
+<aside class="callout nota"><p class="callout-titulo">Qué compilador elegir</p><ul><li><strong>Visual Studio Community</strong> (gratis para uso personal), con la carga de trabajo «Desarrollo para el escritorio con C++». Es pesado, pero compila en 32 y en 64 bits sin configurar nada: abrís el acceso directo <em>x86 Native Tools Command Prompt</em> (32 bits) o <em>x64 Native Tools Command Prompt</em> (64 bits) y compilás con <code>cl /Od /Zi programa.c</code>.</li><li><strong>MinGW-w64</strong> (el compilador GCC para Windows). Es liviano y se usa con <code>gcc -O0 -g -o programa.exe programa.c</code>. Ojo: una instalación de 64 bits normalmente <strong>no</strong> compila en 32 bits aunque le pases <code>-m32</code>. Si elegís este camino, instalá también una variante de 32 bits (i686) para los ejercicios que la piden (1.2 y 2.4).</li></ul><p>IDA Free y Ghidra no hacen falta todavía: aparecen en la lección 2.7.</p></aside>
+<p><strong>Por qué ahora:</strong> instalar herramientas después de copiar una muestra contamina la línea base. Si las instalás antes, la snapshot limpia te devuelve siempre un taller listo.</p>
+<h3 id="paso-3-tomar-la-snapshot-limpia">Paso 4. Tomar la snapshot "limpia"</h3>
 <ol><li>Apagá la VM correctamente (no la suspendas).</li><li>En VirtualBox, seleccioná la VM y usá <strong>Instantáneas &gt; Tomar instantánea</strong>.</li><li>Nombrala <code>00-limpia-sin-muestra</code> y escribí una descripción con la fecha.</li></ol>
 <p><strong>Por qué:</strong> una snapshot guarda el estado del disco. Si algo sale mal, restaurás y volvés exactamente al punto anterior. No es un backup de tus archivos del host; es el estado de la VM.</p>
-<h3 id="paso-4-preparar-la-transferencia-sin-puentes">Paso 4. Preparar la transferencia sin puentes</h3>
+<h3 id="paso-4-preparar-la-transferencia-sin-puentes">Paso 5. Preparar la transferencia sin puentes</h3>
 <p>Para pasar un programa de práctica:</p>
 <ol><li>Creá una imagen ISO con el archivo. En Windows podés usar <code>oscdimg</code> o una herramienta gráfica; en Linux, <code>genisoimage</code>.</li><li>Montá la ISO en la VM como unidad de CD/DVD, copiá el archivo al disco del guest y <strong>desmontá</strong> la ISO.</li><li>Verificá el hash dentro del guest y comparalo con el del host.</li></ol>
 <p>En PowerShell, el comando es:</p>
@@ -71,15 +84,37 @@
 ---------       ----                                                                   ----
 SHA256          A1B2C3D4E5F60718293A4B5C6D7E8F90123456789ABCDEF0123456789ABCDEF0       C:\lab\programa.exe</code></pre>
 <p><strong>Por qué el hash:</strong> dos archivos con el mismo SHA-256 son, en la práctica, el mismo archivo. Si el hash del host y el del guest coinciden, sabés que la transferencia no alteró nada. Si no coinciden, no analices: primero entendé por qué cambió.</p>
-<h3 id="paso-5-ejecutar-y-volver-atrás">Paso 5. Ejecutar y volver atrás</h3>
+<h3 id="paso-5-ejecutar-y-volver-atrás">Paso 6. Ejecutar y volver atrás</h3>
 <ol><li>Confirmá que estás en la snapshot <code>00-limpia-sin-muestra</code>.</li><li>Anotá en tu bitácora: fecha, nombre del archivo, hash, herramienta y objetivo.</li><li>Ejecutá el programa <strong>solo si es propio, abierto o un crackme de práctica</strong>.</li><li>Al terminar, apagá la VM y restaurá la snapshot. No reutilices el estado "sucio" para la próxima muestra.</li></ol>
 <p><strong>Por qué:</strong> restaurar no es opcional. Un programa puede dejar archivos, claves de registro o servicios corriendo. La snapshot te devuelve al punto conocido.</p>
 <h2 id="enfoque-tradicional-y-qué-corregimos">Cuándo observar sin ejecutar (triage estático)</h2>
 <p>En la literatura clásica suele mostrarse un laboratorio con dos máquinas virtuales conectadas entre sí: por ejemplo, en el video 37 de «Videos y material adicional» se observa una muestra (<em>Shelter</em>) dentro de una VM con Windows 7 de 32 bits y otra VM con Kali Linux para simular la red (<a class="fuente" href="../../CLS_resultados_intermedios/transcripciones/extraidos/Videos%20y%20material%20adicional%20Ingenieria%20Inversa/Videos_Video37_Video37.txt">Video 37, introducción</a>, 00:00:00–00:00:40).</p>
 <p>La separación en máquinas virtuales es correcta como principio de contención, pero tené presente una regla fundamental: <strong>ante un archivo desconocido o sospechoso, nunca se empieza ejecutándolo</strong>. Primero se realiza el análisis estático (inspección de cabeceras PE, secciones, cadenas, imports y hashes sin correr el binario), como verás en detalle en las Etapas 1, 2 y 5. En este curso solo ejecutamos programas propios compilados por nosotros mismos o retos didácticos verificados dentro de la VM aislada.</p>
+<h2 id="receta-mínima-compilar-y-abrir-en-el-debugger">Receta mínima: compilar tu primer programa y abrirlo en el debugger</h2>
+<p>Varias prácticas de la Etapa 1 dicen «compilá este programa y miralo en x64dbg» antes de que el curso explique C (lección 1.5) y el debugger (lección 2.6). No hace falta entender todavía lo que ves: alcanza con esta receta para llegar hasta tu código. Volvé a esta sección cada vez que una práctica te lo pida.</p>
+<p><strong>1. Escribí el programa.</strong> Guardalo como <code>hola.c</code> en una carpeta de la VM, por ejemplo <code>C:\lab</code>:</p>
+<pre><code class="lenguaje-c">#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+int main(void) {
+    char palabra[32];
+    printf("Palabra: ");
+    if (scanf("%31s", palabra) != 1) return 1;
+    if (strcmp(palabra, "clase") == 0) puts("hola");
+    else puts("no");
+    return 0;
+}</code></pre>
+<p><strong>2. Compilalo.</strong> Abrí una consola en esa carpeta y usá el comando de tu compilador:</p>
+<pre><code class="lenguaje-text">gcc -O0 -g -o hola.exe hola.c        (MinGW-w64)
+cl /Od /Zi hola.c                    (Visual Studio, desde su Native Tools Command Prompt)</code></pre>
+<p><code>-O0</code> y <code>/Od</code> le piden al compilador que no optimice, para que el resultado se parezca al fuente. Probalo escribiendo <code>hola.exe</code>: tiene que pedirte una palabra.</p>
+<p><strong>3. Abrilo en el debugger.</strong> Usá <code>x64dbg</code> si compilaste en 64 bits o <code>x32dbg</code> si compilaste en 32. Con <em>File → Open</em> elegí <code>hola.exe</code>. El debugger se detiene antes de que el programa haga nada; apretá <kbd>F9</kbd> una vez para llegar al punto de entrada del programa.</p>
+<p><strong>4. Llegá a tu código.</strong> El punto de entrada todavía no es tu <code>main</code>: antes corre código de arranque que agrega el compilador. El camino más simple para encontrar lo tuyo es buscar un texto que vos escribiste: clic derecho sobre el listado → <em>Search for → Current module → String references</em>, y doble clic sobre <code>"Palabra: "</code>. La instrucción donde caés está dentro de <code>main</code>.</p>
+<p><strong>5. Frená ahí.</strong> Con esa línea seleccionada apretá <kbd>F2</kbd> (pone un breakpoint: una marca para que el programa se detenga al llegar) y después <kbd>F9</kbd> (ejecutar). Cuando se detenga, avanzá de a una instrucción con <kbd>F8</kbd> y mirá cómo cambian los paneles. Para empezar de nuevo, <kbd>Ctrl+F2</kbd>.</p>
+<aside class="callout nota"><p class="callout-titulo">Si algo no sale</p><ul><li><strong>El compilador «no se reconoce como comando»:</strong> en Visual Studio, abriste una consola común en vez del <em>Native Tools Command Prompt</em>; en MinGW-w64, falta agregar su carpeta <code>bin</code> al <code>PATH</code>.</li><li><strong>x64dbg dice que el archivo no es de la arquitectura correcta:</strong> abriste un programa de 32 bits con <code>x64dbg</code> (o al revés). Usá el otro ejecutable.</li><li><strong>No aparece tu texto en String references:</strong> estás buscando en otro módulo. Volvé al listado de tu <code>.exe</code> (tecla <kbd>*</kbd>) y repetí la búsqueda.</li></ul></aside>
 <h2 id="práctica-tu-laboratorio-en-una-página">Práctica: tu laboratorio en una página</h2>
 <p>Hacé esto y guardá el resultado. Es el primer entregable del curso.</p>
-<ol><li>Creá la VM con las reglas de arriba.</li><li>Tomá la snapshot limpia.</li><li>Escribí tu propio programa de prueba. El más simple: un <code>.exe</code> que pida una palabra y muestre "hola" si es <code>clase</code>. Compilalo en el guest (o en el host y pasalo por ISO).</li><li>Calculá el SHA-256 en el host y en el guest. Pegá ambos en la bitácora.</li><li>Ejecutalo en x64dbg si ya lo instalaste; si no, ejecutalo suelto y anotá qué pasa.</li><li>Restaurá la snapshot y verificá que el archivo que copiaste ya no está.</li></ol>
+<ol><li>Creá la VM con las reglas de arriba.</li><li>Instalá el taller mínimo (Paso 3) y tomá la snapshot limpia.</li><li>Escribí tu propio programa de prueba: el <code>hola.c</code> de la receta de arriba, que pide una palabra y muestra "hola" si es <code>clase</code>. Compilalo en el guest (o en el host y pasalo por ISO).</li><li>Calculá el SHA-256 en el host y en el guest. Pegá ambos en la bitácora.</li><li>Abrilo en x64dbg siguiendo la receta hasta frenar dentro de <code>main</code>. Anotá qué ves, aunque todavía no lo entiendas.</li><li>Restaurá la snapshot y verificá que el archivo que copiaste ya no está.</li></ol>
 <aside class="callout practica"><p class="callout-titulo">Entregable mínimo</p><p>Un archivo <code>bitacora.md</code> con: nombre de la VM, snapshot usada, programa, hash del host, hash del guest, red configurada, qué hiciste y qué observaste. Sin ese registro, la práctica no cuenta como terminada.</p></aside>
 <h2 id="preguntas-de-repaso">Preguntas de repaso</h2>
 <p><strong>1. ¿Qué diferencia hay entre una snapshot y un backup?</strong> Una snapshot guarda el estado de la VM en un momento; sirve para volver atrás después de un experimento. Un backup es una copia de tus datos para recuperarlos si se pierden. La snapshot no protege tus archivos del host y no reemplaza un backup.</p>
@@ -93,7 +128,7 @@ SHA256          A1B2C3D4E5F60718293A4B5C6D7E8F90123456789ABCDEF0123456789ABCDEF0
 <aside class="callout nota"><p class="callout-titulo">Puerta de salida de la Etapa 0</p><p>Si no podés mostrar tu <code>bitacora.md</code> con los dos hashes y la snapshot, no pases a la lección siguiente. El resto del curso asume que tenés un entorno donde equivocarte no cuesta caro.</p></aside>
 <h2 id="fuentes-de-esta-lección">Fuentes de esta lección</h2>
 <ul><li><a class="fuente" href="../../CLS_resultados_intermedios/transcripciones/extraidos/Reversing%20desde%20cero%20%28Ricardo%20y%20Solid%29/Ricardo%20Narvaja%20y%20Solid%20-%20Reversing%20desde%20cero_01%20x64dbg%20primeros%20pasos_01%20x64dbg%20primeros%20pasos.txt">Reversing desde cero, cap. 01 (x64dbg primeros pasos)</a> — qué hace un debugger y por qué se ejecuta el programa.</li><li><a class="fuente" href="../../CLS_resultados_intermedios/transcripciones/extraidos/Videos%20y%20material%20adicional%20Ingenieria%20Inversa/Videos_Video37_Video37.txt">Videos y material adicional, Video 37</a> — ejemplo observado de laboratorio con dos VMs y ejecución de malware; se cita como caso, no como modelo.</li><li><a class="fuente" href="../../CLS_resultados_intermedios/inventario_limpio/LEEME.md">Inventario limpio, LEEME</a> — criterio de no ejecutar ni extraer archivos durante el inventario.</li><li><a class="fuente" href="../FUENTES_Y_LIMITES.md">Fuentes y límites de esta edición</a> — criterios de alcance y seguridad.</li></ul>
-<aside class="callout nota"><p class="callout-titulo">Síntesis de estudio de esta lección</p><p><strong>Núcleo conceptual:</strong> el uso de VMs en el video 37 y el criterio de no ejecución del inventario. <strong>Conocimiento externo:</strong> funcionamiento de hipervisores, snapshots y hashes. <strong>Recomendación editorial:</strong> las siete reglas de diseño y el procedimiento paso a paso.</p></aside>
+<aside class="callout nota"><p class="callout-titulo">De dónde sale cada parte de esta lección</p><p><strong>Núcleo conceptual:</strong> el uso de VMs en el video 37 y el criterio de no ejecución del inventario. <strong>Conocimiento externo:</strong> funcionamiento de hipervisores, snapshots y hashes. <strong>Recomendación editorial:</strong> las siete reglas de diseño y el procedimiento paso a paso.</p></aside>
 </main>
 <footer class="pie">
   <p>Material educativo y defensivo. Las prácticas se limitan a programas propios, software abierto o crackmes diseñados para aprender. No se enseña a eludir licencias, DRM ni controles de acceso.</p>

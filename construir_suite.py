@@ -740,9 +740,9 @@ def generar_pdf_completo():
         ("guia/01-c-python.html", "1.5 C y Python"),
         ("guia/02-registros.html", "2.1 Registros y flags"),
         ("guia/02-instrucciones.html", "2.2 Instrucciones"),
-        ("guia/02-flotante.html", "2.3 Punto flotante y SSE"),
-        ("guia/02-flujo.html", "2.4 Flujo"),
-        ("guia/02-llamadas.html", "2.5 Llamadas"),
+        ("guia/02-flujo.html", "2.3 Flujo"),
+        ("guia/02-llamadas.html", "2.4 Llamadas"),
+        ("guia/02-flotante.html", "2.5 Punto flotante y SSE"),
         ("guia/02-debugger.html", "2.6 Debugger"),
         ("guia/02-ida.html", "2.7 IDA"),
         ("guia/02-optimizaciones.html", "2.8 Optimizaciones"),
@@ -992,7 +992,7 @@ details.qa summary { font-size: 10pt; }
     orden = [
         ("Etapa 0", ["guia/00-laboratorio.html"]),
         ("Etapa 1", ["guia/01-numeros.html", "guia/01-memoria.html", "guia/01-procesos.html", "guia/01-pe.html", "guia/01-c-python.html"]),
-        ("Etapa 2", ["guia/02-registros.html", "guia/02-instrucciones.html", "guia/02-flotante.html", "guia/02-flujo.html", "guia/02-llamadas.html", "guia/02-debugger.html", "guia/02-ida.html", "guia/02-optimizaciones.html", "guia/02-herramientas.html", "guia/02-ofuscacion.html", "guia/02-tls.html", "guia/02-mfc.html", "guia/02-huella-compilador.html", "guia/02-pe-fino.html", "guia/02-anti-analisis.html", "guia/02-ghidra.html", "guia/02-packers.html", "guia/02-cpp-profundo.html", "guia/02-windbg-heap.html", "guia/02-patch-diffing.html", "guia/02-scripting-debugger.html", "guia/02-opt-malware-dinamico.html", "guia/02-opt-shellcode-c2.html", "guia/02-opt-fuzzing.html", "guia/02-simbolico-desofuscacion.html", "guia/02-ofuscacion-vm.html", "guia/02-protectores-multicapa.html", "guia/02-anti-analisis-neutralizar.html", "guia/02-dbi-dynamorio-pin.html", "guia/02-frida-stalker.html", "guia/02-ghidra-sleigh.html", "guia/02-go-rust.html", "guia/02-vb6-pcode.html", "guia/02-desvirtualizacion-sleigh.html", "guia/02-arm64ec-winrt-aot.html"]),
+        ("Etapa 2", ["guia/02-registros.html", "guia/02-instrucciones.html", "guia/02-flujo.html", "guia/02-llamadas.html", "guia/02-flotante.html", "guia/02-debugger.html", "guia/02-ida.html", "guia/02-optimizaciones.html", "guia/02-herramientas.html", "guia/02-ofuscacion.html", "guia/02-tls.html", "guia/02-mfc.html", "guia/02-huella-compilador.html", "guia/02-pe-fino.html", "guia/02-anti-analisis.html", "guia/02-ghidra.html", "guia/02-packers.html", "guia/02-cpp-profundo.html", "guia/02-windbg-heap.html", "guia/02-patch-diffing.html", "guia/02-scripting-debugger.html", "guia/02-opt-malware-dinamico.html", "guia/02-opt-shellcode-c2.html", "guia/02-opt-fuzzing.html", "guia/02-simbolico-desofuscacion.html", "guia/02-ofuscacion-vm.html", "guia/02-protectores-multicapa.html", "guia/02-anti-analisis-neutralizar.html", "guia/02-dbi-dynamorio-pin.html", "guia/02-frida-stalker.html", "guia/02-ghidra-sleigh.html", "guia/02-go-rust.html", "guia/02-vb6-pcode.html", "guia/02-desvirtualizacion-sleigh.html", "guia/02-arm64ec-winrt-aot.html"]),
         ("Etapa 3", ["guia/03-dotnet-runtime.html", "guia/03-dotnet-il.html"]),
         ("Etapa 4", ["guia/04-metodo.html", "guia/04-cripto.html", "guia/04-informe.html", "guia/04-dinamico-seguro.html", "guia/04-formatos-protocolos.html", "guia/04-protocolos-terceros.html"]),
         ("Etapa 5", ["guia/05-malware.html", "guia/05-vulnerabilidades.html", "guia/05-automatizacion.html", "guia/05-fuera-de-alcance.html"]),
@@ -1229,6 +1229,21 @@ details.qa summary { font-size: 10pt; }
     }
 
 
+# Página de relleno opcional antes de la portadilla de la Parte B del Tomo I.
+# recompilar_tomo1.py la activa solo si la portadilla cae en página par, para que
+# la Parte A cierre en un pliego completo y la Parte B empiece en página impar.
+RELLENO_ANTES_PARTE_B = ""
+BLOQUE_NOTAS_PARTE_A = """
+<section class="print-sec" id="notas-cierre-parte-a" style="page-break-before: always; break-before: page;">
+<h2 style="border: none;">Notas de la Parte A</h2>
+<p><em>Esta página cierra la Parte A en un pliego completo, para que la Parte B empiece en página impar al imprimir a doble faz. Usala para anotar dudas abiertas antes de seguir.</em></p>
+<div class="tabla"><table>
+<thead><tr><th>Lección</th><th>Duda o punto a repasar</th><th>Resuelta</th></tr></thead><tbody>
+""" + ("<tr><td>&nbsp;<br>&nbsp;<br>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>" * 8) + """</tbody></table></div>
+</section>
+"""
+
+
 def bloque_colofon_notas(titulo_volumen):
     return f"""
 <section class="print-sec" id="colofon-notas">
@@ -1399,7 +1414,7 @@ def generar_tomos_y_separata(ctx):
     orden_t1 = [
         ("Etapa 0", ["guia/00-laboratorio.html"]),
         ("Etapa 1", ["guia/01-numeros.html", "guia/01-memoria.html", "guia/01-procesos.html", "guia/01-pe.html", "guia/01-c-python.html"]),
-        ("Etapa 2", ["guia/02-registros.html", "guia/02-instrucciones.html", "guia/02-flotante.html", "guia/02-flujo.html", "guia/02-llamadas.html", "guia/02-debugger.html", "guia/02-ida.html", "guia/02-optimizaciones.html", "guia/02-herramientas.html", "guia/02-ofuscacion.html", "guia/02-tls.html", "guia/02-mfc.html", "guia/02-huella-compilador.html", "guia/02-pe-fino.html", "guia/02-anti-analisis.html", "guia/02-ghidra.html", "guia/02-packers.html", "guia/02-cpp-profundo.html", "guia/02-windbg-heap.html", "guia/02-patch-diffing.html", "guia/02-scripting-debugger.html", "guia/02-opt-malware-dinamico.html", "guia/02-opt-shellcode-c2.html", "guia/02-opt-fuzzing.html", "guia/02-simbolico-desofuscacion.html", "guia/02-ofuscacion-vm.html", "guia/02-protectores-multicapa.html", "guia/02-anti-analisis-neutralizar.html", "guia/02-dbi-dynamorio-pin.html", "guia/02-frida-stalker.html", "guia/02-ghidra-sleigh.html", "guia/02-go-rust.html", "guia/02-vb6-pcode.html", "guia/02-desvirtualizacion-sleigh.html", "guia/02-arm64ec-winrt-aot.html"]),
+        ("Etapa 2", ["guia/02-registros.html", "guia/02-instrucciones.html", "guia/02-flujo.html", "guia/02-llamadas.html", "guia/02-flotante.html", "guia/02-debugger.html", "guia/02-ida.html", "guia/02-optimizaciones.html", "guia/02-herramientas.html", "guia/02-ofuscacion.html", "guia/02-tls.html", "guia/02-mfc.html", "guia/02-huella-compilador.html", "guia/02-pe-fino.html", "guia/02-anti-analisis.html", "guia/02-ghidra.html", "guia/02-packers.html", "guia/02-cpp-profundo.html", "guia/02-windbg-heap.html", "guia/02-patch-diffing.html", "guia/02-scripting-debugger.html", "guia/02-opt-malware-dinamico.html", "guia/02-opt-shellcode-c2.html", "guia/02-opt-fuzzing.html", "guia/02-simbolico-desofuscacion.html", "guia/02-ofuscacion-vm.html", "guia/02-protectores-multicapa.html", "guia/02-anti-analisis-neutralizar.html", "guia/02-dbi-dynamorio-pin.html", "guia/02-frida-stalker.html", "guia/02-ghidra-sleigh.html", "guia/02-go-rust.html", "guia/02-vb6-pcode.html", "guia/02-desvirtualizacion-sleigh.html", "guia/02-arm64ec-winrt-aot.html"]),
         ("Etapa 3", ["guia/03-dotnet-runtime.html", "guia/03-dotnet-il.html"]),
         ("Etapa 4", ["guia/04-metodo.html", "guia/04-cripto.html", "guia/04-informe.html", "guia/04-dinamico-seguro.html", "guia/04-formatos-protocolos.html", "guia/04-protocolos-terceros.html"]),
         ("Etapa 5", ["guia/05-malware.html", "guia/05-vulnerabilidades.html", "guia/05-automatizacion.html", "guia/05-fuera-de-alcance.html"]),
@@ -1442,7 +1457,7 @@ def generar_tomos_y_separata(ctx):
         lecs = [x for x in LECCIONES if x[0].startswith(pref)]
         for lrel, _ in lecs:
             if lrel == "guia/02-cpp-profundo.html":
-                partes_t1.append("""
+                partes_t1.append(RELLENO_ANTES_PARTE_B + """
 <section class="print-sec" id="parte-b-portadilla" style="page-break-before: always; break-before: page;">
 <div style="margin-top: 25mm; padding: 18mm 15mm; border: 2px solid #2b5797; background: #fafbfc; border-radius: 4px; text-align: center;">
 <p style="font-size: 11pt; text-transform: uppercase; letter-spacing: 2px; color: #555; margin-bottom: 8pt;">Curso de Reversing · Tomo I</p>

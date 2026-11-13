@@ -50,7 +50,7 @@
 </tbody></table></div>
 <p><strong>Regla de oro en x64:</strong> Escribir en un subregistro de <strong>32 bits</strong> (p. ej. <code>mov eax, 1</code>) <strong>pone en cero los 32 bits superiores</strong> de <code>RAX</code>. Escribir en <strong>16 u 8 bits</strong> (<code>ax</code>, <code>al</code>) <strong>conserva intactos</strong> los bits restantes.</p>
 
-<h3 id="1-2-flags-y-saltos-condicionales-tras-cmp-op1-op2-lección-2-4">1.2 Flags y saltos condicionales tras <code>CMP op1, op2</code> (Lección 2.4)</h3>
+<h3 id="1-2-flags-y-saltos-condicionales-tras-cmp-op1-op2-lección-2-4">1.2 Flags y saltos condicionales tras <code>CMP op1, op2</code> (Lección 2.3)</h3>
 <div class="tabla"><table>
 <thead><tr>
 <th>Relación lógica (<code>op1</code> vs <code>op2</code>)</th>
@@ -66,7 +66,7 @@
 <tr><td>Menor o igual (<code>op1 &lt;= op2</code>)</td><td><code>JBE</code> / <code>JNA</code></td><td><code>JLE</code> / <code>JNG</code></td><td>Sin signo: <code>CF = 1 o ZF = 1</code> · Con signo: <code>ZF = 1 o SF != OF</code></td></tr>
 </tbody></table></div>
 
-<h3 id="1-3-conversión-va-rva-file-offset-y-convenciones-de-llamada-lecciones-1-2-1-4-y-2-5">1.3 Conversión VA &harr; RVA &harr; File Offset y convenciones de llamada (Lecciones 1.2, 1.4 y 2.5)</h3>
+<h3 id="1-3-conversión-va-rva-file-offset-y-convenciones-de-llamada-lecciones-1-2-1-4-y-2-5">1.3 Conversión VA &harr; RVA &harr; File Offset y convenciones de llamada (Lecciones 1.2, 1.4 y 2.4)</h3>
 <pre><code class="lenguaje-text">RVA         = VA_en_memoria - ImageBase_actual
 File Offset = RVA - VirtualAddress_sección + PointerToRawData_sección
 VA_en_IDA   = Base_en_IDA + (VA_en_x64dbg - Base_en_x64dbg)   [Sincronización rápida con ASLR]</code></pre>
